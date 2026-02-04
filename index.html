@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Aplikasi Kimia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .gradient-bg::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: grid-move 20s linear infinite;
+    }
+    
+    .gradient-bg::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(102, 126, 234, 0.2) 0%, transparent 50%);
+      animation: pulse-gradient 8s ease-in-out infinite;
+    }
+    
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+    
+    @keyframes pulse-gradient {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+    
+    .card-hover:active {
+    transform: scale(0.98); 
+    filter: brightness(0.95);
+}
+    .glow-effect {
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full gradient-bg overflow-auto">
+  <div class="w-full min-h-full flex flex-col items-center justify-center p-6 sm:p-8 md:p-12"><!-- Header Section -->
+   <div class="text-center mb-12 float-animation">
+    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/20 backdrop-blur-lg mb-6 glow-effect"><span class="text-5xl">⚗️</span>
+    </div>
+    <h1 id="main-title" class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">Portal Website Kimia</h1>
+    <p id="subtitle" class="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">Kumpulan website interaktif untuk mempermudah pembelajaran kimia</p>
+   </div><!-- Cards Grid -->
+   <div class="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12"><!-- Card 1: Cek Sifat Larutan dengan Input Nama -->
+    <div class="card-hover bg-white rounded-3xl p-8 shadow-xl cursor-pointer" onclick="navigateToApp('phchecker.html')">
+     <div class="text-6xl mb-6 text-center">
+      🧪
+     </div>
+     <h3 class="text-2xl font-bold text-gray-800 mb-3 text-center">Cek Sifat Larutan</h3>
+     <p class="text-gray-600 mb-6 text-center">Identifikasi sifat asam, basa, atau netral dari berbagai larutan kimia dengan memasukkan nama atau rumus kimia. Database 400+ senyawa!</p>
+     <div class="flex items-center justify-center text-indigo-600 font-semibold"><span>Buka Halaman</span>
+      <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+     </div>
+    </div><!-- Card 2: Cek Sifat Larutan dengan Slider pH -->
+    <div class="card-hover bg-white rounded-3xl p-8 shadow-xl cursor-pointer" onclick="navigateToApp('phslider.html')">
+     <div class="text-6xl mb-6 text-center">
+      📊
+     </div>
+     <h3 class="text-2xl font-bold text-gray-800 mb-3 text-center">Cek pH Larutan</h3>
+     <p class="text-gray-600 mb-6 text-center">Tentukan sifat larutan berdasarkan nilai pH menggunakan slider interaktif atau input angka langsung. Visualisasi skala pH yang menarik!</p>
+     <div class="flex items-center justify-center text-indigo-600 font-semibold"><span>Buka Halaman</span>
+      <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+     </div>
+    </div>
+   </div><!-- Footer -->
+   <div class="text-center">
+    <p id="footer-text" class="text-white/80 text-sm">© 2026 Portal Website Kimia - Dibuat untuk mempermudah pembelajaran</p>
+   </div>
+  </div>
+  <script>
+    function navigateToApp(appUrl) {
+      window.location.href = appUrl;
+    }
+  </script>
+ </body>
+</html>
