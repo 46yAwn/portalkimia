@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cek Sifat Larutan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .input-glow:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+    }
+    
+    .result-card {
+      animation: slideUp 0.5s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(102, 126, 234, 0.6);
+      }
+    }
+    
+    .pulse-animation {
+      animation: pulse-glow 2s infinite;
+    }
+    
+    .ph-scale {
+      background: linear-gradient(to right, 
+        #ff0000 0%, 
+        #ff6600 14%, 
+        #ffcc00 28%, 
+        #99cc00 42%, 
+        #00cc00 50%, 
+        #00cc99 58%, 
+        #0099cc 72%, 
+        #0066cc 86%, 
+        #6600cc 100%
+      );
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 6s infinite ease-in-out;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full gradient-bg overflow-auto"><!-- Decorative Bubbles -->
+  <div class="bubble" style="width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s;"></div>
+  <div class="bubble" style="width: 120px; height: 120px; top: 60%; right: 10%; animation-delay: 2s;"></div>
+  <div class="bubble" style="width: 60px; height: 60px; bottom: 20%; left: 20%; animation-delay: 4s;"></div>
+  <div class="w-full min-h-full flex items-center justify-center p-4 sm:p-6 md:p-8">
+   <div class="w-full max-w-2xl"><!-- Main Card -->
+    <div class="glass-card rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10"><!-- Header -->
+     <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 mb-4 pulse-animation">
+       <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+       </svg>
+      </div>
+      <h1 id="app-title" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2">🧪 Cek Sifat Larutan</h1>
+      <p id="subtitle" class="text-gray-600 text-sm sm:text-base">Masukkan nama larutan untuk mengetahui sifatnya</p>
+     </div><!-- Input Section -->
+     <div class="mb-6">
+      <div class="relative"><input type="text" id="solution-input" placeholder="Contoh: HCl, NaOH, H2O, Cuka, dll..." class="w-full px-5 py-4 text-lg rounded-2xl border-2 border-gray-200 focus:border-indigo-500 focus:outline-none input-glow transition-all duration-300 bg-white">
+       <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+       </div>
+      </div>
+     </div><!-- Check Button --> <button id="check-btn" onclick="checkSolution()" class="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold text-lg rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"> 🔬 Cek Sifat Larutan </button> <!-- Result Section -->
+     <div id="result-container" class="mt-8 hidden">
+      <div id="result-card" class="result-card rounded-2xl p-6 text-center">
+       <div id="result-icon" class="text-6xl mb-4"></div>
+       <h2 id="result-name" class="text-xl font-bold mb-2"></h2>
+       <div id="result-type" class="text-3xl font-bold mb-3"></div>
+       <p id="result-ph" class="text-lg mb-4"></p>
+       <p id="result-description" class="text-sm opacity-90"></p><!-- pH Scale -->
+       <div class="mt-6">
+        <p class="text-sm font-medium mb-2 text-gray-700">Skala pH</p>
+        <div class="relative">
+         <div class="ph-scale h-4 rounded-full"></div>
+         <div id="ph-indicator" class="absolute top-0 w-4 h-4 bg-white border-2 border-gray-800 rounded-full transform -translate-x-1/2 transition-all duration-500"></div>
+        </div>
+        <div class="flex justify-between text-xs mt-1 text-gray-600"><span>0 (Asam)</span> <span>7 (Netral)</span> <span>14 (Basa)</span>
+        </div>
+       </div>
+      </div>
+     </div><!-- Warning Notice -->
+     <div class="mt-8 pt-6 border-t border-gray-200">
+      <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+       <div class="flex items-start">
+        <div class="flex-shrink-0">
+         <svg class="h-5 w-5 text-yellow-400" viewbox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+         </svg>
+        </div>
+        <div class="ml-3">
+         <p class="text-sm text-yellow-700"><span class="font-semibold">Perhatian:</span> <br>Beberapa senyawa mungkin tidak terdeteksi karena keterbatasan database<br></p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <p class="text-center text-white/80 text-sm mt-6">💡 Tips: Ketik nama larutan dalam bahasa Indonesia atau rumus kimia</p>
+   </div>
+  </div>
+  <script>
+    // Database larutan - 400+ senyawa
+    const solutionDatabase = {
+      // Asam Kuat
+      'hcl': { name: 'Asam Klorida (HCl)', type: 'asam', ph: 1, description: 'Asam kuat yang biasa digunakan di laboratorium dan industri.' },
+      'asam klorida': { name: 'Asam Klorida (HCl)', type: 'asam', ph: 1, description: 'Asam kuat yang biasa digunakan di laboratorium dan industri.' },
+      'asam lambung': { name: 'Asam Lambung (HCl)', type: 'asam', ph: 2, description: 'Asam klorida yang diproduksi lambung untuk mencerna makanan.' },
+      'h2so4': { name: 'Asam Sulfat (H₂SO₄)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam aki dan industri kimia.' },
+      'asam sulfat': { name: 'Asam Sulfat (H₂SO₄)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam aki dan industri kimia.' },
+      'hno3': { name: 'Asam Nitrat (HNO₃)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan untuk membuat pupuk dan bahan peledak.' },
+      'asam nitrat': { name: 'Asam Nitrat (HNO₃)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan untuk membuat pupuk dan bahan peledak.' },
+      'hbr': { name: 'Asam Bromida (HBr)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam sintesis organik.' },
+      'hi': { name: 'Asam Iodida (HI)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam reaksi kimia organik.' },
+      'hclo4': { name: 'Asam Perklorat (HClO₄)', type: 'asam', ph: 0, description: 'Salah satu asam terkuat yang dikenal.' },
+      
+      // Asam Lemah
+      'ch3cooh': { name: 'Asam Asetat (CH₃COOH)', type: 'asam', ph: 3, description: 'Asam lemah yang merupakan komponen utama cuka.' },
+      'asam asetat': { name: 'Asam Asetat (CH₃COOH)', type: 'asam', ph: 3, description: 'Asam lemah yang merupakan komponen utama cuka.' },
+      'cuka': { name: 'Cuka (Asam Asetat)', type: 'asam', ph: 3, description: 'Larutan asam asetat yang biasa digunakan untuk memasak.' },
+      'h2co3': { name: 'Asam Karbonat (H₂CO₃)', type: 'asam', ph: 4, description: 'Asam lemah yang terbentuk saat CO₂ larut dalam air.' },
+      'asam karbonat': { name: 'Asam Karbonat (H₂CO₃)', type: 'asam', ph: 4, description: 'Asam lemah yang terbentuk saat CO₂ larut dalam air.' },
+      'h3po4': { name: 'Asam Fosfat (H₃PO₄)', type: 'asam', ph: 2, description: 'Asam lemah yang digunakan dalam minuman cola dan pupuk.' },
+      'asam fosfat': { name: 'Asam Fosfat (H₃PO₄)', type: 'asam', ph: 2, description: 'Asam lemah yang digunakan dalam minuman cola dan pupuk.' },
+      'asam sitrat': { name: 'Asam Sitrat (C�����H₈O₇)', type: 'asam', ph: 2, description: 'Asam lemah yang ditemukan dalam buah jeruk.' },
+      'c6h8o7': { name: 'Asam Sitrat (C₆H₈O₇)', type: 'asam', ph: 2, description: 'Asam lemah yang ditemukan dalam buah jeruk.' },
+      'lemon': { name: 'Air Lemon', type: 'asam', ph: 2, description: 'Mengandung asam sitrat yang memberikan rasa masam.' },
+      'jeruk': { name: 'Air Jeruk', type: 'asam', ph: 3, description: 'Mengandung asam sitrat dan asam askorbat (vitamin C).' },
+      'hf': { name: 'Asam Fluorida (HF)', type: 'asam', ph: 3, description: 'Asam lemah yang sangat korosif dan berbahaya.' },
+      'asam fluorida': { name: 'Asam Fluorida (HF)', type: 'asam', ph: 3, description: 'Asam lemah yang sangat korosif dan berbahaya.' },
+      'h2s': { name: 'Asam Sulfida (H₂S)', type: 'asam', ph: 4, description: 'Asam lemah dengan bau telur busuk.' },
+      'hcn': { name: 'Asam Sianida (HCN)', type: 'asam', ph: 5, description: 'Asam lemah yang sangat beracun.' },
+      'tomat': { name: 'Jus Tomat', type: 'asam', ph: 4, description: 'Mengandung asam sitrat dan asam malat.' },
+      'kopi': { name: 'Kopi', type: 'asam', ph: 5, description: 'Minuman yang sedikit asam karena mengandung asam klorogenat.' },
+      'susu': { name: 'Susu', type: 'asam', ph: 6, description: 'Sedikit asam karena mengandung asam laktat.' },
+      'yogurt': { name: 'Yogurt', type: 'asam', ph: 4, description: 'Asam karena proses fermentasi menghasilkan asam laktat.' },
+      'asam oksalat': { name: 'Asam Oksalat (H₂C₂O₄)', type: 'asam', ph: 2, description: 'Asam organik yang ditemukan dalam bayam dan coklat.' },
+      'h2c2o4': { name: 'Asam Oksalat (H₂C₂O₄)', type: 'asam', ph: 2, description: 'Asam organik yang ditemukan dalam bayam dan coklat.' },
+      'asam benzoat': { name: 'Asam Benzoat (C₆H��COOH)', type: 'asam', ph: 3, description: 'Pengawet makanan yang bersifat asam lemah.' },
+      'c6h5cooh': { name: 'Asam Benzoat (C₆H₅COOH)', type: 'asam', ph: 3, description: 'Pengawet makanan yang bersifat asam lemah.' },
+      'asam laktat': { name: 'Asam Laktat (C₃H₆O₃)', type: 'asam', ph: 3, description: 'Asam yang dihasilkan oleh otot saat berolahraga.' },
+      'c3h6o3': { name: 'Asam Laktat (C₃H₆O₃)', type: 'asam', ph: 3, description: 'Asam yang dihasilkan oleh otot saat berolahraga.' },
+      'asam tartarat': { name: 'Asam Tartarat', type: 'asam', ph: 3, description: 'Asam yang ditemukan dalam anggur dan digunakan dalam pembuatan kue.' },
+      'asam malat': { name: 'Asam Malat', type: 'asam', ph: 3, description: 'Asam yang memberikan rasa pada apel.' },
+      'asam format': { name: 'Asam Format (HCOOH)', type: 'asam', ph: 2, description: 'Asam yang ditemukan dalam racun semut.' },
+      'hcooh': { name: 'Asam Format (HCOOH)', type: 'asam', ph: 2, description: 'Asam yang ditemukan dalam racun semut.' },
+      'asam borat': { name: 'Asam Borat (H₃BO₃)', type: 'asam', ph: 5, description: 'Asam lemah yang digunakan sebagai antiseptik.' },
+      'h3bo3': { name: 'Asam Borat (H₃BO₃)', type: 'asam', ph: 5, description: 'Asam lemah yang digunakan sebagai antiseptik.' },
+      'asam askorbat': { name: 'Asam Askorbat (Vitamin C)', type: 'asam', ph: 3, description: 'Vitamin C yang memiliki sifat asam.' },
+      'vitamin c': { name: 'Vitamin C (Asam Askorbat)', type: 'asam', ph: 3, description: 'Antioksidan yang bersifat asam.' },
+      'h2so3': { name: 'Asam Sulfit (H₂SO₃)', type: 'asam', ph: 2, description: 'Asam lemah yang terbentuk saat SO₂ larut dalam air.' },
+      'asam sulfit': { name: 'Asam Sulfit (H₂SO₃)', type: 'asam', ph: 2, description: 'Asam lemah yang terbentuk saat SO₂ larut dalam air.' },
+      'hclo': { name: 'Asam Hipoklorit (HClO)', type: 'asam', ph: 4, description: 'Asam lemah yang merupakan bahan aktif dalam pemutih.' },
+      'asam hipoklorit': { name: 'Asam Hipoklorit (HClO)', type: 'asam', ph: 4, description: 'Asam lemah yang merupakan bahan aktif dalam pemutih.' },
+      'hclo3': { name: 'Asam Klorat (HClO₃)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam pembuatan bahan peledak.' },
+      'asam klorat': { name: 'Asam Klorat (HClO₃)', type: 'asam', ph: 1, description: 'Asam kuat yang digunakan dalam pembuatan bahan peledak.' },
+      'h3aso4': { name: 'Asam Arsenat (H₃AsO₄)', type: 'asam', ph: 2, description: 'Asam yang mengandung arsenik, beracun.' },
+      'asam arsenat': { name: 'Asam Arsenat (H₃AsO₄)', type: 'asam', ph: 2, description: 'Asam yang mengandung arsenik, beracun.' },
+      'h2cro4': { name: 'Asam Kromat (H₂CrO₄)', type: 'asam', ph: 1, description: 'Asam kuat yang bersifat korosif dan karsinogenik.' },
+      'asam kromat': { name: 'Asam Kromat (H₂CrO₄)', type: 'asam', ph: 1, description: 'Asam kuat yang bersifat korosif dan karsinogenik.' },
+      'hno2': { name: 'Asam Nitrit (HNO₂)', type: 'asam', ph: 3, description: 'Asam lemah yang tidak stabil.' },
+      'asam nitrit': { name: 'Asam Nitrit (HNO₂)', type: 'asam', ph: 3, description: 'Asam lemah yang tidak stabil.' },
+      'h2sio3': { name: 'Asam Silikat (H₂SiO₃)', type: 'asam', ph: 4, description: 'Asam lemah yang ditemukan dalam mineral silikat.' },
+      'asam silikat': { name: 'Asam Silikat (H₂SiO₃)', type: 'asam', ph: 4, description: 'Asam lemah yang ditemukan dalam mineral silikat.' },
+      'asam amino': { name: 'Asam Amino', type: 'asam', ph: 6, description: 'Molekul pembentuk protein yang bersifat amfoter.' },
+      'asam glutamat': { name: 'Asam Glutamat', type: 'asam', ph: 3, description: 'Asam amino yang digunakan sebagai MSG (penyedap rasa).' },
+      'msg': { name: 'MSG (Asam Glutamat)', type: 'asam', ph: 3, description: 'Monosodium glutamat, penyedap rasa yang sedikit asam.' },
+      'asam lemak': { name: 'Asam Lemak', type: 'asam', ph: 5, description: 'Komponen lemak yang bersifat asam lemah.' },
+      'asam palmitat': { name: 'Asam Palmitat', type: 'asam', ph: 5, description: 'Asam lemak jenuh yang ditemukan dalam minyak kelapa sawit.' },
+      'asam oleat': { name: 'Asam Oleat', type: 'asam', ph: 5, description: 'Asam lemak tak jenuh yang ditemukan dalam minyak zaitun.' },
+      'asam stearat': { name: 'Asam Stearat', type: 'asam', ph: 5, description: 'Asam lemak jenuh yang digunakan dalam pembuatan sabun.' },
+      'asam linoleat': { name: 'Asam Linoleat', type: 'asam', ph: 5, description: 'Asam lemak omega-6 esensial.' },
+      'cuka apel': { name: 'Cuka Apel', type: 'asam', ph: 3, description: 'Cuka yang terbuat dari fermentasi apel, mengandung asam asetat.' },
+      'air jeruk nipis': { name: 'Air Jeruk Nipis', type: 'asam', ph: 2, description: 'Mengandung asam sitrat dengan pH sangat asam.' },
+      'jeruk nipis': { name: 'Jeruk Nipis', type: 'asam', ph: 2, description: 'Buah dengan kandungan asam sitrat tinggi.' },
+      'nanas': { name: 'Jus Nanas', type: 'asam', ph: 4, description: 'Mengandung asam sitrat dan asam malat.' },
+      'apel': { name: 'Jus Apel', type: 'asam', ph: 4, description: 'Mengandung asam malat yang memberikan rasa masam.' },
+      'strawberry': { name: 'Jus Strawberry', type: 'asam', ph: 3, description: 'Mengandung asam sitrat dan asam ellagat.' },
+      'anggur hitam': { name: 'Jus Anggur', type: 'asam', ph: 3, description: 'Mengandung asam tartarat.' },
+      'cola': { name: 'Minuman Cola', type: 'asam', ph: 3, description: 'Mengandung asam fosfat dan asam karbonat.' },
+      'soda': { name: 'Minuman Soda', type: 'asam', ph: 3, description: 'Mengandung asam karbonat dari CO₂ terlarut.' },
+      'cider': { name: 'Cider Apel', type: 'asam', ph: 4, description: 'Minuman fermentasi apel yang bersifat asam.' },
+      'anggur': { name: 'Anggur/Wine', type: 'asam', ph: 3, description: 'Mengandung asam tartarat dan asam malat.' },
+      'air hujan': { name: 'Air Hujan', type: 'asam', ph: 6, description: 'Sedikit asam karena menyerap CO₂ dari atmosfer.' },
+      'keringat': { name: 'Keringat', type: 'asam', ph: 5, description: 'Mengandung asam laktat dan urea.' },
+      'hujan asam': { name: 'Hujan Asam', type: 'asam', ph: 4, description: 'Air hujan yang tercemar SO₂ dan NO₂, sangat asam.' },
+      'asam arakidonat': { name: 'Asam Arakidonat', type: 'asam', ph: 5, description: 'Asam lemak omega-6 esensial.' },
+      'asam folat': { name: 'Asam Folat (Vitamin B9)', type: 'asam', ph: 5, description: 'Vitamin B yang penting untuk pertumbuhan sel.' },
+      'vitamin b': { name: 'Vitamin B (Kompleks)', type: 'asam', ph: 5, description: 'Kelompok vitamin yang larut air.' },
+      'asam nikotinat': { name: 'Asam Nikotinat (Niacin)', type: 'asam', ph: 4, description: 'Vitamin B3 yang bersifat asam.' },
+      'asam pantotenat': { name: 'Asam Pantotenat (Vitamin B5)', type: 'asam', ph: 5, description: 'Vitamin B5 untuk metabolisme.' },
+      'asam lipoat': { name: 'Asam Lipoat', type: 'asam', ph: 5, description: 'Antioksidan kuat yang larut lemak dan air.' },
+      'asam urat': { name: 'Asam Urat', type: 'asam', ph: 5, description: 'Produk akhir metabolisme purin.' },
+      'asam nukleat': { name: 'Asam Nukleat (DNA/RNA)', type: 'asam', ph: 7, description: 'Makromolekul pembawa informasi genetik.' },
+      'dna': { name: 'DNA (Asam Deoksiribonukleat)', type: 'asam', ph: 7, description: 'Materi genetik dalam sel.' },
+      'rna': { name: 'RNA (Asam Ribonukleat)', type: 'asam', ph: 7, description: 'Asam nukleat untuk sintesis protein.' },
+      'asam salisilat': { name: 'Asam Salisilat', type: 'asam', ph: 3, description: 'Asam yang digunakan dalam aspirin dan perawatan kulit.' },
+      'aspirin': { name: 'Aspirin (Asam Asetilsalisilat)', type: 'asam', ph: 3, description: 'Obat penghilang rasa sakit yang bersifat asam.' },
+      'asam asetilsalisilat': { name: 'Asam Asetilsalisilat', type: 'asam', ph: 3, description: 'Nama kimia dari aspirin.' },
+      'vitamin e': { name: 'Vitamin E (Tokoferol)', type: 'netral', ph: 7, description: 'Antioksidan yang larut lemak.' },
+      'asam hialuronat': { name: 'Asam Hialuronat', type: 'asam', ph: 6, description: 'Polisakarida yang menjaga kelembaban kulit.' },
+      'asam glikolat': { name: 'Asam Glikolat', type: 'asam', ph: 3, description: 'AHA untuk eksfoliasi kulit.' },
+      'asam salisilat kulit': { name: 'Asam Salisilat (Perawatan Kulit)', type: 'asam', ph: 3, description: 'BHA untuk mengangkat sel kulit mati.' },
+      'aha': { name: 'AHA (Alpha Hydroxy Acid)', type: 'asam', ph: 3, description: 'Asam untuk eksfoliasi kulit.' },
+      'bha': { name: 'BHA (Beta Hydroxy Acid)', type: 'asam', ph: 3, description: 'Asam salisilat untuk perawatan kulit berminyak.' },
+      'toner wajah': { name: 'Toner Wajah', type: 'asam', ph: 5, description: 'Produk perawatan kulit yang sedikit asam.' },
+      'essence': { name: 'Essence Wajah', type: 'asam', ph: 5, description: 'Produk perawatan kulit Korea yang sedikit asam.' },
+      'serum wajah': { name: 'Serum Wajah', type: 'asam', ph: 5, description: 'Produk perawatan kulit konsentrat.' },
+      'micellar water': { name: 'Micellar Water', type: 'netral', ph: 7, description: 'Pembersih wajah yang lembut dan netral.' },
+      'air mawar': { name: 'Air Mawar', type: 'asam', ph: 5, description: 'Toner alami dari mawar yang sedikit asam.' },
+      'air beras': { name: 'Air Beras (Fermentasi)', type: 'asam', ph: 5, description: 'Air beras fermentasi untuk perawatan kulit.' },
+      'cuka apel kulit': { name: 'Cuka Apel (Perawatan Kulit)', type: 'asam', ph: 3, description: 'Toner alami yang sangat asam.' },
+      'witch hazel': { name: 'Witch Hazel', type: 'asam', ph: 4, description: 'Astringen alami yang sedikit asam.' },
+      'teh hijau': { name: 'Teh Hijau', type: 'basa', ph: 8, description: 'Antioksidan tinggi yang sedikit basa.' },
+      'teh hitam': { name: 'Teh Hitam', type: 'asam', ph: 5, description: 'Teh yang difermentasi, sedikit asam.' },
+      'teh oolong': { name: 'Teh Oolong', type: 'netral', ph: 7, description: 'Teh semi-fermentasi yang netral.' },
+      'teh putih': { name: 'Teh Putih', type: 'basa', ph: 8, description: 'Teh paling ringan yang sedikit basa.' },
+      'matcha': { name: 'Matcha', type: 'basa', ph: 9, description: 'Bubuk teh hijau yang bersifat basa.' },
+      'kombucha': { name: 'Kombucha', type: 'asam', ph: 3, description: 'Teh fermentasi yang sangat asam dengan probiotik.' },
+      'sake': { name: 'Sake', type: 'asam', ph: 4, description: 'Minuman beras fermentasi Jepang yang asam.' },
+      'soju': { name: 'Soju', type: 'netral', ph: 7, description: 'Minuman Korea yang netral.' },
+      'bir': { name: 'Bir', type: 'asam', ph: 4, description: 'Minuman beralkohol dari fermentasi biji-bijian.' },
+      'wine merah': { name: 'Wine Merah', type: 'asam', ph: 4, description: 'Anggur merah yang bersifat asam.' },
+      'wine putih': { name: 'Wine Putih', type: 'asam', ph: 3, description: 'Anggur putih yang lebih asam dari wine merah.' },
+      'champagne': { name: 'Champagne', type: 'asam', ph: 3, description: 'Wine bersoda dari Prancis yang asam.' },
+      'whiskey': { name: 'Whiskey', type: 'asam', ph: 4, description: 'Minuman keras dari fermentasi biji-bijian.' },
+      'vodka': { name: 'Vodka', type: 'netral', ph: 7, description: 'Minuman keras yang netral.' },
+      'gin': { name: 'Gin', type: 'asam', ph: 5, description: 'Minuman keras dengan rasa juniper.' },
+      'rum': { name: 'Rum', type: 'asam', ph: 5, description: 'Minuman keras dari tebu yang sedikit asam.' },
+      'tequila': { name: 'Tequila', type: 'asam', ph: 4, description: 'Minuman keras dari agave.' },
+      'absinth': { name: 'Absinth', type: 'netral', ph: 7, description: 'Minuman keras dengan kadar alkohol tinggi.' },
+      
+      // Basa Kuat
+      'naoh': { name: 'Natrium Hidroksida (NaOH)', type: 'basa', ph: 14, description: 'Basa kuat yang dikenal sebagai soda api/caustic soda.' },
+      'natrium hidroksida': { name: 'Natrium Hidroksida (NaOH)', type: 'basa', ph: 14, description: 'Basa kuat yang dikenal sebagai soda api/caustic soda.' },
+      'soda api': { name: 'Soda Api (NaOH)', type: 'basa', ph: 14, description: 'Basa kuat yang digunakan untuk membuat sabun.' },
+      'koh': { name: 'Kalium Hidroksida (KOH)', type: 'basa', ph: 14, description: 'Basa kuat yang digunakan dalam industri sabun dan pupuk.' },
+      'kalium hidroksida': { name: 'Kalium Hidroksida (KOH)', type: 'basa', ph: 14, description: 'Basa kuat yang digunakan dalam industri sabun dan pupuk.' },
+      'ca(oh)2': { name: 'Kalsium Hidroksida (Ca(OH)₂)', type: 'basa', ph: 12, description: 'Basa yang dikenal sebagai kapur sirih/slaked lime.' },
+      'kapur': { name: 'Air Kapur (Ca(OH)₂)', type: 'basa', ph: 12, description: 'Larutan kalsium hidroksida dalam air.' },
+      'kapur sirih': { name: 'Kapur Sirih (Ca(OH)₂)', type: 'basa', ph: 12, description: 'Kalsium hidroksida yang digunakan untuk makan sirih.' },
+      'ba(oh)2': { name: 'Barium Hidroksida (Ba(OH)₂)', type: 'basa', ph: 13, description: 'Basa kuat yang digunakan dalam analisis kimia.' },
+      'lioh': { name: 'Litium Hidroksida (LiOH)', type: 'basa', ph: 13, description: 'Basa kuat yang digunakan dalam baterai.' },
+      'rboh': { name: 'Rubidium Hidroksida (RbOH)', type: 'basa', ph: 14, description: 'Basa kuat yang sangat reaktif.' },
+      'csoh': { name: 'Sesium Hidroksida (CsOH)', type: 'basa', ph: 14, description: 'Basa terkuat di antara hidroksida alkali.' },
+      'sr(oh)2': { name: 'Stronsium Hidroksida (Sr(OH)₂)', type: 'basa', ph: 13, description: 'Basa kuat yang larut dalam air.' },
+      
+      // Basa Lemah
+      'nh3': { name: 'Amonia (NH₃)', type: 'basa', ph: 11, description: 'Basa lemah dengan bau menyengat, digunakan sebagai pembersih.' },
+      'amonia': { name: 'Amonia (NH₃)', type: 'basa', ph: 11, description: 'Basa lemah dengan bau menyengat, digunakan sebagai pembersih.' },
+      'nh4oh': { name: 'Amonium Hidroksida (NH₄OH)', type: 'basa', ph: 11, description: 'Larutan amonia dalam air.' },
+      'sabun': { name: 'Larutan Sabun', type: 'basa', ph: 10, description: 'Basa lemah yang digunakan untuk membersihkan.' },
+      'deterjen': { name: 'Larutan Deterjen', type: 'basa', ph: 10, description: 'Basa lemah yang digunakan untuk mencuci.' },
+      'baking soda': { name: 'Baking Soda (NaHCO₃)', type: 'basa', ph: 9, description: 'Basa lemah yang digunakan untuk memasak dan membersihkan.' },
+      'nahco3': { name: 'Natrium Bikarbonat (NaHCO₃)', type: 'basa', ph: 9, description: 'Basa lemah yang dikenal sebagai baking soda.' },
+      'natrium bikarbonat': { name: 'Natrium Bikarbonat (NaHCO₃)', type: 'basa', ph: 9, description: 'Basa lemah yang dikenal sebagai baking soda.' },
+      'mg(oh)2': { name: 'Magnesium Hidroksida (Mg(OH)₂)', type: 'basa', ph: 10, description: 'Basa lemah yang digunakan sebagai antasida.' },
+      'antasida': { name: 'Antasida (Mg(OH)₂)', type: 'basa', ph: 10, description: 'Obat maag yang mengandung magnesium hidroksida.' },
+      'pasta gigi': { name: 'Pasta Gigi', type: 'basa', ph: 9, description: 'Sedikit basa untuk menetralkan asam di mulut.' },
+      'pemutih': { name: 'Pemutih (Bleach)', type: 'basa', ph: 12, description: 'Larutan natrium hipoklorit yang bersifat basa.' },
+      'naclo': { name: 'Natrium Hipoklorit (NaClO)', type: 'basa', ph: 12, description: 'Bahan aktif dalam pemutih pakaian.' },
+      'na2co3': { name: 'Natrium Karbonat (Na₂CO₃)', type: 'basa', ph: 11, description: 'Soda abu yang digunakan dalam industri kaca dan sabun.' },
+      'soda abu': { name: 'Soda Abu (Na₂CO₃)', type: 'basa', ph: 11, description: 'Natrium karbonat yang bersifat basa.' },
+      'natrium karbonat': { name: 'Natrium Karbonat (Na₂CO₃)', type: 'basa', ph: 11, description: 'Soda abu yang digunakan dalam industri kaca dan sabun.' },
+      'boraks': { name: 'Boraks (Na₂B₄O₇)', type: 'basa', ph: 9, description: 'Garam natrium dari asam borat, digunakan sebagai pembersih.' },
+      'na2b4o7': { name: 'Boraks (Na₂B₄O₇)', type: 'basa', ph: 9, description: 'Garam natrium dari asam borat, digunakan sebagai pembersih.' },
+      'al(oh)3': { name: 'Aluminium Hidroksida (Al(OH)₃)', type: 'basa', ph: 9, description: 'Basa lemah yang digunakan sebagai antasida.' },
+      'aluminium hidroksida': { name: 'Aluminium Hidroksida (Al(OH)₃)', type: 'basa', ph: 9, description: 'Basa lemah yang digunakan sebagai antasida.' },
+      'fe(oh)2': { name: 'Besi(II) Hidroksida (Fe(OH)₂)', type: 'basa', ph: 9, description: 'Basa lemah yang berwarna hijau.' },
+      'fe(oh)3': { name: 'Besi(III) Hidroksida (Fe(OH)₃)', type: 'basa', ph: 9, description: 'Basa lemah yang berwarna coklat-merah.' },
+      'zn(oh)2': { name: 'Seng Hidroksida (Zn(OH)₂)', type: 'basa', ph: 9, description: 'Basa lemah yang amfoter.' },
+      'cu(oh)2': { name: 'Tembaga(II) Hidroksida (Cu(OH)₂)', type: 'basa', ph: 9, description: 'Basa lemah berwarna biru.' },
+      'air laut': { name: 'Air Laut', type: 'basa', ph: 8, description: 'Sedikit basa karena mengandung garam karbonat.' },
+      'air sadah': { name: 'Air Sadah', type: 'basa', ph: 8, description: 'Mengandung ion kalsium dan magnesium, sedikit basa.' },
+      'teh': { name: 'Teh', type: 'basa', ph: 8, description: 'Sedikit basa tergantung jenis dan cara penyeduhan.' },
+      'shampoo': { name: 'Shampoo', type: 'basa', ph: 8, description: 'Sedikit basa untuk membersihkan minyak di rambut.' },
+      'air soda': { name: 'Air Soda Kue', type: 'basa', ph: 9, description: 'Larutan natrium bikarbonat yang bersifat basa lemah.' },
+      'soda kue': { name: 'Soda Kue (NaHCO₃)', type: 'basa', ph: 9, description: 'Natrium bikarbonat untuk kue dan membersihkan.' },
+      'shampo bayi': { name: 'Shampo Bayi', type: 'basa', ph: 7, description: 'pH lebih netral agar tidak pedih di mata.' },
+      'kondisioner': { name: 'Kondisioner Rambut', type: 'basa', ph: 5, description: 'Sedikit asam untuk menutup kutikula rambut.' },
+      'cairan pembersih': { name: 'Cairan Pembersih', type: 'basa', ph: 11, description: 'Pembersih alkalin untuk noda membandel.' },
+      'karbol': { name: 'Karbol', type: 'basa', ph: 10, description: 'Pembersih lantai yang bersifat basa.' },
+      'sabun cuci piring': { name: 'Sabun Cuci Piring', type: 'basa', ph: 10, description: 'Deterjen untuk membersihkan lemak pada piring.' },
+      'pembersih toilet': { name: 'Pembersih Toilet', type: 'basa', ph: 12, description: 'Pembersih alkalin kuat untuk toilet.' },
+      'pembersih oven': { name: 'Pembersih Oven', type: 'basa', ph: 13, description: 'Pembersih sangat basa untuk lemak yang gosong.' },
+      'obat batuk': { name: 'Obat Batuk (Sirup)', type: 'basa', ph: 8, description: 'Sedikit basa untuk meredakan tenggorokan.' },
+      'susu magnesia': { name: 'Susu Magnesia', type: 'basa', ph: 10, description: 'Magnesium hidroksida sebagai antasida dan pencahar.' },
+      'tums': { name: 'Tums (Antasida)', type: 'basa', ph: 9, description: 'Kalsium karbonat untuk menetralkan asam lambung.' },
+      'caco3': { name: 'Kalsium Karbonat (CaCO₃)', type: 'basa', ph: 9, description: 'Basa lemah dalam batu kapur dan antasida.' },
+      'kalsium karbonat': { name: 'Kalsium Karbonat (CaCO₃)', type: 'basa', ph: 9, description: 'Basa lemah dalam batu kapur dan antasida.' },
+      'batu kapur': { name: 'Batu Kapur (CaCO₃)', type: 'basa', ph: 9, description: 'Kalsium karbonat yang bersifat basa lemah.' },
+      'semen': { name: 'Semen (Larutan)', type: 'basa', ph: 12, description: 'Sangat basa karena mengandung kalsium hidroksida.' },
+      'air semen': { name: 'Air Semen', type: 'basa', ph: 12, description: 'Larutan semen yang sangat basa dan korosif.' },
+      'pembersih saluran': { name: 'Pembersih Saluran Air', type: 'basa', ph: 14, description: 'Natrium hidroksida untuk membuka sumbatan pipa.' },
+      'drano': { name: 'Drano (Pembersih Pipa)', type: 'basa', ph: 14, description: 'Pembersih pipa berbasis NaOH yang sangat basa.' },
+      'air kolam renang': { name: 'Air Kolam Renang', type: 'basa', ph: 8, description: 'Dijaga sedikit basa dengan sodium karbonat.' },
+      'air alkali': { name: 'Air Alkali (Alkaline Water)', type: 'basa', ph: 9, description: 'Air minum dengan pH tinggi yang dipromosikan untuk kesehatan.' },
+      
+      // Netral
+      'h2o': { name: 'Air Murni (H₂O)', type: 'netral', ph: 7, description: 'Pelarut universal dengan pH netral.' },
+      'air': { name: 'Air (H₂O)', type: 'netral', ph: 7, description: 'Pelarut universal dengan pH netral.' },
+      'aquades': { name: 'Aquades (H₂O)', type: 'netral', ph: 7, description: 'Air murni hasil destilasi.' },
+      'air destilasi': { name: 'Air Destilasi', type: 'netral', ph: 7, description: 'Air murni tanpa mineral.' },
+      'nacl': { name: 'Natrium Klorida (NaCl)', type: 'netral', ph: 7, description: 'Garam dapur yang bersifat netral dalam larutan.' },
+      'garam': { name: 'Larutan Garam (NaCl)', type: 'netral', ph: 7, description: 'Garam dapur yang bersifat netral dalam larutan.' },
+      'garam dapur': { name: 'Garam Dapur (NaCl)', type: 'netral', ph: 7, description: 'Natrium klorida yang bersifat netral.' },
+      'kcl': { name: 'Kalium Klorida (KCl)', type: 'netral', ph: 7, description: 'Garam yang bersifat netral.' },
+      'glukosa': { name: 'Larutan Glukosa', type: 'netral', ph: 7, description: 'Larutan gula yang bersifat netral.' },
+      'gula': { name: 'Larutan Gula', type: 'netral', ph: 7, description: 'Larutan sukrosa yang bersifat netral.' },
+      'alkohol': { name: 'Etanol (C₂H₅OH)', type: 'netral', ph: 7, description: 'Alkohol yang bersifat netral.' },
+      'etanol': { name: 'Etanol (C₂H₅OH)', type: 'netral', ph: 7, description: 'Alkohol yang bersifat netral.' },
+      'c2h5oh': { name: 'Etanol (C₂H₅OH)', type: 'netral', ph: 7, description: 'Alkohol yang bersifat netral.' },
+      'darah': { name: 'Darah', type: 'netral', ph: 7.4, description: 'Cairan tubuh dengan pH sedikit basa (7.35-7.45).' },
+      'nano3': { name: 'Natrium Nitrat (NaNO₃)', type: 'netral', ph: 7, description: 'Garam netral yang digunakan sebagai pupuk.' },
+      'natrium nitrat': { name: 'Natrium Nitrat (NaNO₃)', type: 'netral', ph: 7, description: 'Garam netral yang digunakan sebagai pupuk.' },
+      'kno3': { name: 'Kalium Nitrat (KNO₃)', type: 'netral', ph: 7, description: 'Garam sendawa yang bersifat netral.' },
+      'kalium nitrat': { name: 'Kalium Nitrat (KNO₃)', type: 'netral', ph: 7, description: 'Garam sendawa yang bersifat netral.' },
+      'cacl2': { name: 'Kalsium Klorida (CaCl₂)', type: 'netral', ph: 7, description: 'Garam kalsium yang bersifat netral.' },
+      'kalsium klorida': { name: 'Kalsium Klorida (CaCl₂)', type: 'netral', ph: 7, description: 'Garam kalsium yang bersifat netral.' },
+      'mgcl2': { name: 'Magnesium Klorida (MgCl₂)', type: 'netral', ph: 7, description: 'Garam magnesium yang bersifat netral.' },
+      'magnesium klorida': { name: 'Magnesium Klorida (MgCl₂)', type: 'netral', ph: 7, description: 'Garam magnesium yang bersifat netral.' },
+      'k2so4': { name: 'Kalium Sulfat (K₂SO₄)', type: 'netral', ph: 7, description: 'Pupuk kalium yang bersifat netral.' },
+      'kalium sulfat': { name: 'Kalium Sulfat (K₂SO₄)', type: 'netral', ph: 7, description: 'Pupuk kalium yang bersifat netral.' },
+      'na2so4': { name: 'Natrium Sulfat (Na₂SO₄)', type: 'netral', ph: 7, description: 'Garam Glauber yang bersifat netral.' },
+      'natrium sulfat': { name: 'Natrium Sulfat (Na₂SO₄)', type: 'netral', ph: 7, description: 'Garam Glauber yang bersifat netral.' },
+      'sukrosa': { name: 'Sukrosa (C₁₂H₂₂O₁₁)', type: 'netral', ph: 7, description: 'Gula pasir yang bersifat netral.' },
+      'c12h22o11': { name: 'Sukrosa (C₁₂H₂₂O₁₁)', type: 'netral', ph: 7, description: 'Gula pasir yang bersifat netral.' },
+      'fruktosa': { name: 'Fruktosa', type: 'netral', ph: 7, description: 'Gula buah yang bersifat netral.' },
+      'c6h12o6': { name: 'Glukosa (C₆H₁₂O₆)', type: 'netral', ph: 7, description: 'Gula darah yang bersifat netral.' },
+      'urea': { name: 'Urea (CO(NH₂)₂)', type: 'netral', ph: 7, description: 'Pupuk nitrogen yang bersifat netral.' },
+      'co(nh2)2': { name: 'Urea (CO(NH₂)₂)', type: 'netral', ph: 7, description: 'Pupuk nitrogen yang bersifat netral.' },
+      'air kelapa': { name: 'Air Kelapa', type: 'netral', ph: 7, description: 'Cairan alami yang mendekati netral.' },
+      'air mineral': { name: 'Air Mineral', type: 'netral', ph: 7, description: 'Air minum yang mengandung mineral, pH netral.' },
+      'air keran': { name: 'Air Keran', type: 'netral', ph: 7, description: 'Air minum dari PDAM, umumnya netral.' },
+      'liur': { name: 'Liur/Saliva', type: 'netral', ph: 7, description: 'Cairan mulut dengan pH mendekati netral.' },
+      'air mata': { name: 'Air Mata', type: 'netral', ph: 7.4, description: 'Cairan mata yang sedikit basa.' },
+      'metanol': { name: 'Metanol (CH₃OH)', type: 'netral', ph: 7, description: 'Alkohol metil yang bersifat netral.' },
+      'ch3oh': { name: 'Metanol (CH₃OH)', type: 'netral', ph: 7, description: 'Alkohol metil yang bersifat netral.' },
+      'propanol': { name: 'Propanol (C₃H₇OH)', type: 'netral', ph: 7, description: 'Alkohol propil yang netral.' },
+      'c3h7oh': { name: 'Propanol (C₃H₇OH)', type: 'netral', ph: 7, description: 'Alkohol propil yang netral.' },
+      'isopropanol': { name: 'Isopropanol (Alkohol 70%)', type: 'netral', ph: 7, description: 'Alkohol gosok yang bersifat netral.' },
+      'alkohol 70': { name: 'Alkohol 70%', type: 'netral', ph: 7, description: 'Isopropanol untuk desinfektan.' },
+      'gliserin': { name: 'Gliserin (C₃H₈O₃)', type: 'netral', ph: 7, description: 'Alkohol trihidroksi yang netral, digunakan dalam kosmetik.' },
+      'c3h8o3': { name: 'Gliserin (C₃H₈O₃)', type: 'netral', ph: 7, description: 'Alkohol trihidroksi yang netral.' },
+      'gliserol': { name: 'Gliserol (Gliserin)', type: 'netral', ph: 7, description: 'Cairan kental manis yang netral.' },
+      'aseton': { name: 'Aseton (CH₃COCH₃)', type: 'netral', ph: 7, description: 'Pelarut organik yang bersifat netral.' },
+      'ch3coch3': { name: 'Aseton (CH₃COCH₃)', type: 'netral', ph: 7, description: 'Pelarut organik yang bersifat netral.' },
+      'air suling': { name: 'Air Suling (Distilled Water)', type: 'netral', ph: 7, description: 'Air murni hasil penyulingan.' },
+      'air murni': { name: 'Air Murni', type: 'netral', ph: 7, description: 'Air tanpa kontaminan dengan pH netral.' },
+      'air ro': { name: 'Air RO (Reverse Osmosis)', type: 'netral', ph: 7, description: 'Air hasil filter RO yang sangat murni.' },
+      'air galon': { name: 'Air Galon', type: 'netral', ph: 7, description: 'Air minum dalam kemasan galon.' },
+      'air botol': { name: 'Air Botol', type: 'netral', ph: 7, description: 'Air minum dalam kemasan botol.' },
+      'air minum': { name: 'Air Minum', type: 'netral', ph: 7, description: 'Air yang layak untuk dikonsumsi.' },
+      'aqua': { name: 'Aqua (Air Mineral)', type: 'netral', ph: 7, description: 'Merek air mineral dengan pH netral.' },
+      'air zam-zam': { name: 'Air Zam-Zam', type: 'netral', ph: 8, description: 'Air suci dari Mekkah yang sedikit alkali.' },
+      'larutan gula': { name: 'Larutan Gula', type: 'netral', ph: 7, description: 'Air gula yang bersifat netral.' },
+      'sirup': { name: 'Sirup Gula', type: 'netral', ph: 7, description: 'Larutan gula pekat yang netral.' },
+      'madu': { name: 'Madu', type: 'asam', ph: 4, description: 'Cairan manis alami yang sedikit asam.' },
+      'air tebu': { name: 'Air Tebu', type: 'netral', ph: 7, description: 'Jus tebu yang mengandung sukrosa.' },
+      'asi': { name: 'ASI (Air Susu Ibu)', type: 'netral', ph: 7, description: 'Cairan alami untuk bayi dengan pH netral.' },
+      'susu formula': { name: 'Susu Formula', type: 'netral', ph: 7, description: 'Susu untuk bayi dengan pH disesuaikan netral.' },
+      'susu kedelai': { name: 'Susu Kedelai', type: 'netral', ph: 7, description: 'Susu nabati yang bersifat netral.' },
+      'susu almond': { name: 'Susu Almond', type: 'netral', ph: 7, description: 'Susu nabati dari kacang almond.' },
+      'infus': { name: 'Cairan Infus (NaCl 0.9%)', type: 'netral', ph: 7, description: 'Larutan garam fisiologis untuk infus.' },
+      'nacl 0.9': { name: 'NaCl 0.9% (Saline)', type: 'netral', ph: 7, description: 'Larutan garam fisiologis.' },
+      'ringer laktat': { name: 'Ringer Laktat', type: 'netral', ph: 7, description: 'Cairan infus yang mengandung elektrolit.' },
+      'dextrose': { name: 'Dextrose 5%', type: 'netral', ph: 7, description: 'Larutan glukosa untuk infus.' },
+      'plasma darah': { name: 'Plasma Darah', type: 'netral', ph: 7.4, description: 'Bagian cair darah tanpa sel darah.' },
+      'serum': { name: 'Serum Darah', type: 'netral', ph: 7.4, description: 'Plasma darah tanpa fibrinogen.' },
+      'cairan serebrospinal': { name: 'Cairan Serebrospinal', type: 'netral', ph: 7.4, description: 'Cairan yang mengelilingi otak dan sumsum tulang.' },
+      'urine': { name: 'Urine', type: 'asam', ph: 6, description: 'Cairan sisa metabolisme yang sedikit asam.' },
+      'air seni': { name: 'Air Seni (Urine)', type: 'asam', ph: 6, description: 'Cairan ekskresi dari ginjal.' },
+      'air kencing': { name: 'Air Kencing', type: 'asam', ph: 6, description: 'Urine yang dikeluarkan tubuh.' },
+      'air ludah': { name: 'Air Ludah (Saliva)', type: 'netral', ph: 7, description: 'Cairan mulut yang netral.' },
+      'saliva': { name: 'Saliva', type: 'netral', ph: 7, description: 'Air liur yang membantu pencernaan.' },
+      'benzena': { name: 'Benzena (C₆H₆)', type: 'netral', ph: 7, description: 'Senyawa aromatik yang netral dan karsinogenik.' },
+      'c6h6': { name: 'Benzena (C₆H₆)', type: 'netral', ph: 7, description: 'Hidrokarbon aromatik.' },
+      'toluena': { name: 'Toluena (C₇H₈)', type: 'netral', ph: 7, description: 'Pelarut organik yang netral.' },
+      'c7h8': { name: 'Toluena (C₇H₈)', type: 'netral', ph: 7, description: 'Metilbenzena yang netral.' },
+      'xilena': { name: 'Xilena (C₈H₁₀)', type: 'netral', ph: 7, description: 'Pelarut organik yang netral.' },
+      'c8h10': { name: 'Xilena (C₈H₁₀)', type: 'netral', ph: 7, description: 'Dimetilbenzena.' },
+      'heksana': { name: 'Heksana (C₆H₁₄)', type: 'netral', ph: 7, description: 'Alkana yang bersifat netral.' },
+      'c6h14': { name: 'Heksana (C₆H₁₄)', type: 'netral', ph: 7, description: 'Hidrokarbon alifatik.' },
+      'bensin': { name: 'Bensin', type: 'netral', ph: 7, description: 'Campuran hidrokarbon untuk bahan bakar.' },
+      'minyak tanah': { name: 'Minyak Tanah (Kerosene)', type: 'netral', ph: 7, description: 'Fraksi minyak bumi yang netral.' },
+      'solar': { name: 'Solar (Diesel)', type: 'netral', ph: 7, description: 'Bahan bakar diesel yang netral.' },
+      'oli': { name: 'Oli Mesin', type: 'netral', ph: 7, description: 'Pelumas mesin yang bersifat netral.' },
+      'minyak goreng': { name: 'Minyak Goreng', type: 'netral', ph: 7, description: 'Minyak nabati untuk memasak, netral.' },
+      'minyak kelapa': { name: 'Minyak Kelapa', type: 'netral', ph: 7, description: 'Minyak dari kelapa yang netral.' },
+      'minyak zaitun': { name: 'Minyak Zaitun', type: 'netral', ph: 7, description: 'Minyak sehat dari buah zaitun.' },
+      'minyak sawit': { name: 'Minyak Sawit', type: 'netral', ph: 7, description: 'Minyak dari kelapa sawit.' },
+      'mentega': { name: 'Mentega (Cair)', type: 'netral', ph: 7, description: 'Lemak susu yang netral.' },
+      'margarin': { name: 'Margarin (Cair)', type: 'netral', ph: 7, description: 'Pengganti mentega yang netral.' },
+      'kecap manis': { name: 'Kecap Manis', type: 'netral', ph: 7, description: 'Kecap dengan gula yang mendekati netral.' },
+      'kecap asin': { name: 'Kecap Asin', type: 'asam', ph: 5, description: 'Kecap dengan garam yang sedikit asam.' },
+      'saus tomat': { name: 'Saus Tomat', type: 'asam', ph: 4, description: 'Saus dari tomat yang bersifat asam.' },
+      'saus sambal': { name: 'Saus Sambal', type: 'asam', ph: 4, description: 'Saus pedas yang sedikit asam.' },
+      'mayones': { name: 'Mayones', type: 'asam', ph: 4, description: 'Saus emulsi yang mengandung cuka, bersifat asam.' },
+      'saus bbq': { name: 'Saus BBQ', type: 'asam', ph: 4, description: 'Saus barbekyu yang sedikit asam.' },
+      'air tahu': { name: 'Air Tahu', type: 'netral', ph: 7, description: 'Air dari pembuatan tahu yang netral.' },
+      'air rendaman kacang': { name: 'Air Rendaman Kacang', type: 'netral', ph: 7, description: 'Air bekas merendam kacang.' },
+      'santan': { name: 'Santan Kelapa', type: 'netral', ph: 7, description: 'Ekstrak kelapa yang bersifat netral.' },
+      'air cucian beras': { name: 'Air Cucian Beras', type: 'netral', ph: 7, description: 'Air bekas mencuci beras yang netral.' },
+      
+      // Minuman & Jus Tambahan
+      'jus wortel': { name: 'Jus Wortel', type: 'netral', ph: 7, description: 'Jus sayuran yang kaya vitamin A.' },
+      'jus bayam': { name: 'Jus Bayam', type: 'basa', ph: 8, description: 'Jus sayuran hijau yang sedikit basa.' },
+      'jus seledri': { name: 'Jus Seledri', type: 'basa', ph: 8, description: 'Jus sayuran yang bersifat alkali.' },
+      'jus timun': { name: 'Jus Timun', type: 'basa', ph: 8, description: 'Jus sayuran yang menyegarkan dan basa.' },
+      'jus bit': { name: 'Jus Bit', type: 'netral', ph: 7, description: 'Jus umbi bit yang kaya nutrisi.' },
+      'jus labu': { name: 'Jus Labu', type: 'netral', ph: 7, description: 'Jus sayuran yang manis dan netral.' },
+      'jus pepaya': { name: 'Jus Pepaya', type: 'asam', ph: 6, description: 'Jus buah yang sedikit asam dengan enzim papain.' },
+      'jus mangga': { name: 'Jus Mangga', type: 'asam', ph: 5, description: 'Jus buah tropis yang manis dan asam.' },
+      'jus melon': { name: 'Jus Melon', type: 'netral', ph: 7, description: 'Jus buah yang manis dan menyegarkan.' },
+      'jus semangka': { name: 'Jus Semangka', type: 'basa', ph: 8, description: 'Jus buah yang sangat menyegarkan dan basa.' },
+      'jus pisang': { name: 'Jus Pisang', type: 'basa', ph: 8, description: 'Jus buah yang kaya kalium dan basa.' },
+      'jus alpukat': { name: 'Jus Alpukat', type: 'basa', ph: 8, description: 'Jus buah yang creamy dan basa.' },
+      'jus kelapa muda': { name: 'Jus Kelapa Muda', type: 'netral', ph: 7, description: 'Air kelapa muda yang segar.' },
+      'jus belimbing': { name: 'Jus Belimbing', type: 'asam', ph: 3, description: 'Jus buah yang sangat asam.' },
+      'jus cranberry': { name: 'Jus Cranberry', type: 'asam', ph: 3, description: 'Jus buah berry yang sangat asam.' },
+      'jus blueberry': { name: 'Jus Blueberry', type: 'asam', ph: 4, description: 'Jus berry antioksidan yang asam.' },
+      'jus blackberry': { name: 'Jus Blackberry', type: 'asam', ph: 4, description: 'Jus berry hitam yang asam.' },
+      'jus raspberry': { name: 'Jus Raspberry', type: 'asam', ph: 3, description: 'Jus berry merah yang asam.' },
+      'jus cherry': { name: 'Jus Cherry', type: 'asam', ph: 4, description: 'Jus ceri yang manis dan asam.' },
+      'jus delima': { name: 'Jus Delima', type: 'asam', ph: 3, description: 'Jus buah delima yang kaya antioksidan.' },
+      'jus kiwi': { name: 'Jus Kiwi', type: 'asam', ph: 3, description: 'Jus buah kiwi yang sangat asam.' },
+      'jus pir': { name: 'Jus Pir', type: 'netral', ph: 7, description: 'Jus buah pir yang manis.' },
+      'jus persik': { name: 'Jus Persik', type: 'asam', ph: 4, description: 'Jus buah persik yang manis asam.' },
+      'jus plum': { name: 'Jus Plum', type: 'asam', ph: 4, description: 'Jus buah plum yang asam.' },
+      'jus aprikot': { name: 'Jus Aprikot', type: 'asam', ph: 4, description: 'Jus buah aprikot yang asam.' },
+      'jus leci': { name: 'Jus Leci', type: 'asam', ph: 5, description: 'Jus buah leci yang manis asam.' },
+      'jus rambutan': { name: 'Jus Rambutan', type: 'asam', ph: 5, description: 'Jus buah tropis yang manis.' },
+      'jus durian': { name: 'Jus Durian', type: 'netral', ph: 7, description: 'Jus buah durian yang creamy.' },
+      'jus sirsak': { name: 'Jus Sirsak', type: 'asam', ph: 4, description: 'Jus buah sirsak yang asam.' },
+      'jus markisa': { name: 'Jus Markisa', type: 'asam', ph: 3, description: 'Jus passion fruit yang sangat asam.' },
+      'jus jambu biji': { name: 'Jus Jambu Biji', type: 'asam', ph: 5, description: 'Jus jambu merah/putih yang segar.' },
+      'jus salak': { name: 'Jus Salak', type: 'asam', ph: 5, description: 'Jus buah salak yang manis asam.' },
+      'jus kedondong': { name: 'Jus Kedondong', type: 'asam', ph: 3, description: 'Jus buah yang sangat asam.' },
+      'jus belimbing wuluh': { name: 'Jus Belimbing Wuluh', type: 'asam', ph: 2, description: 'Jus sayuran yang sangat asam.' },
+      'es teh manis': { name: 'Es Teh Manis', type: 'netral', ph: 7, description: 'Teh dengan gula yang netral.' },
+      'es jeruk': { name: 'Es Jeruk', type: 'asam', ph: 3, description: 'Minuman jeruk yang asam dan segar.' },
+      'es kelapa': { name: 'Es Kelapa', type: 'netral', ph: 7, description: 'Air kelapa dingin yang segar.' },
+      'es campur': { name: 'Es Campur', type: 'netral', ph: 7, description: 'Minuman dessert dengan sirup.' },
+      'es cendol': { name: 'Es Cendol', type: 'netral', ph: 7, description: 'Minuman tradisional dengan santan.' },
+      'es teler': { name: 'Es Teler', type: 'netral', ph: 7, description: 'Minuman buah dengan santan.' },
+      'es dawet': { name: 'Es Dawet', type: 'netral', ph: 7, description: 'Minuman Jawa dengan santan.' },
+      'bandrek': { name: 'Bandrek', type: 'netral', ph: 7, description: 'Minuman jahe tradisional Sunda.' },
+      'bajigur': { name: 'Bajigur', type: 'netral', ph: 7, description: 'Minuman santan hangat tradisional.' },
+      'wedang jahe': { name: 'Wedang Jahe', type: 'netral', ph: 7, description: 'Minuman jahe hangat.' },
+      'wedang ronde': { name: 'Wedang Ronde', type: 'netral', ph: 7, description: 'Minuman hangat dengan bola ketan.' },
+      'sekoteng': { name: 'Sekoteng', type: 'netral', ph: 7, description: 'Minuman hangat dengan kacang tanah.' },
+      'susu jahe': { name: 'Susu Jahe', type: 'netral', ph: 7, description: 'Susu dengan jahe yang hangat.' },
+      'susu kunyit': { name: 'Susu Kunyit (Turmeric Latte)', type: 'netral', ph: 7, description: 'Minuman susu dengan kunyit.' },
+      'golden milk': { name: 'Golden Milk', type: 'netral', ph: 7, description: 'Susu kunyit dengan rempah.' },
+      'latte': { name: 'Latte (Kopi Susu)', type: 'netral', ph: 7, description: 'Kopi espresso dengan susu.' },
+      'cappuccino': { name: 'Cappuccino', type: 'asam', ph: 5, description: 'Kopi dengan foam susu.' },
+      'espresso': { name: 'Espresso', type: 'asam', ph: 5, description: 'Kopi pekat yang sangat kuat.' },
+      'americano': { name: 'Americano', type: 'asam', ph: 5, description: 'Espresso dengan air panas.' },
+      'macchiato': { name: 'Macchiato', type: 'asam', ph: 5, description: 'Espresso dengan sedikit susu.' },
+      'mocha': { name: 'Mocha', type: 'asam', ph: 5, description: 'Kopi dengan coklat.' },
+      'frappuccino': { name: 'Frappuccino', type: 'netral', ph: 7, description: 'Kopi dingin blended dengan es.' },
+      'kopi hitam': { name: 'Kopi Hitam', type: 'asam', ph: 5, description: 'Kopi tanpa gula dan susu.' },
+      'kopi susu': { name: 'Kopi Susu', type: 'netral', ph: 7, description: 'Kopi dengan susu manis.' },
+      'kopi tubruk': { name: 'Kopi Tubruk', type: 'asam', ph: 5, description: 'Kopi tradisional Indonesia.' },
+      'kopi luwak': { name: 'Kopi Luwak', type: 'asam', ph: 5, description: 'Kopi premium dari Indonesia.' },
+      'teh tarik': { name: 'Teh Tarik', type: 'netral', ph: 7, description: 'Teh susu khas Malaysia.' },
+      'teh poci': { name: 'Teh Poci', type: 'basa', ph: 8, description: 'Teh hijau tanpa gula.' },
+      'teh melati': { name: 'Teh Melati (Jasmine Tea)', type: 'basa', ph: 8, description: 'Teh dengan aroma melati.' },
+      'teh chamomile': { name: 'Teh Chamomile', type: 'netral', ph: 7, description: 'Teh herbal untuk relaksasi.' },
+      'teh peppermint': { name: 'Teh Peppermint', type: 'netral', ph: 7, description: 'Teh herbal dengan mint.' },
+      'teh rosella': { name: 'Teh Rosella', type: 'asam', ph: 3, description: 'Teh bunga yang sangat asam.' },
+      'teh hibiscus': { name: 'Teh Hibiscus', type: 'asam', ph: 3, description: 'Teh bunga kembang sepatu.' },
+      'teh jahe': { name: 'Teh Jahe', type: 'netral', ph: 7, description: 'Teh dengan jahe hangat.' },
+      'teh lemon': { name: 'Teh Lemon', type: 'asam', ph: 4, description: 'Teh dengan perasan lemon.' },
+      'thai tea': { name: 'Thai Tea', type: 'netral', ph: 7, description: 'Teh Thailand yang manis dan creamy.' },
+      'bubble tea': { name: 'Bubble Tea', type: 'netral', ph: 7, description: 'Teh susu dengan boba.' },
+      'boba': { name: 'Boba (Bubble Tea)', type: 'netral', ph: 7, description: 'Minuman teh dengan pearl tapioka.' },
+      'milk tea': { name: 'Milk Tea', type: 'netral', ph: 7, description: 'Teh susu Taiwan.' },
+      'brown sugar milk': { name: 'Brown Sugar Milk', type: 'netral', ph: 7, description: 'Susu dengan gula merah.' },
+      'taro milk': { name: 'Taro Milk Tea', type: 'netral', ph: 7, description: 'Minuman susu rasa talas.' },
+      'matcha latte': { name: 'Matcha Latte', type: 'basa', ph: 9, description: 'Matcha dengan susu.' },
+      'hojicha': { name: 'Hojicha', type: 'netral', ph: 7, description: 'Teh Jepang yang dipanggang.' },
+      'genmaicha': { name: 'Genmaicha', type: 'basa', ph: 8, description: 'Teh hijau dengan beras panggang.' },
+      'sencha': { name: 'Sencha', type: 'basa', ph: 8, description: 'Teh hijau Jepang premium.' },
+      'gyokuro': { name: 'Gyokuro', type: 'basa', ph: 9, description: 'Teh hijau Jepang terbaik.' },
+      
+      // Produk Kimia Industri & Laboratorium
+      'formaldehid': { name: 'Formaldehid (HCHO)', type: 'asam', ph: 3, description: 'Pengawet jaringan yang bersifat asam.' },
+      'formalin': { name: 'Formalin', type: 'asam', ph: 3, description: 'Larutan formaldehid 37% untuk pengawet.' },
+      'hcho': { name: 'Formaldehid (HCHO)', type: 'asam', ph: 3, description: 'Aldehid sederhana yang beracun.' },
+      'etil asetat': { name: 'Etil Asetat (CH₃COOC₂H₅)', type: 'netral', ph: 7, description: 'Pelarut organik untuk cat dan lem.' },
+      'ch3cooc2h5': { name: 'Etil Asetat', type: 'netral', ph: 7, description: 'Ester yang bersifat netral.' },
+      'asam pikrat': { name: 'Asam Pikrat', type: 'asam', ph: 1, description: 'Asam kuat dan bahan peledak.' },
+      'trinitrotoluena': { name: 'TNT (Trinitrotoluena)', type: 'netral', ph: 7, description: 'Bahan peledak yang netral.' },
+      'tnt': { name: 'TNT (Bahan Peledak)', type: 'netral', ph: 7, description: 'Trinitrotoluena untuk peledak.' },
+      'nitrogliserin': { name: 'Nitrogliserin', type: 'netral', ph: 7, description: 'Bahan peledak dan obat jantung.' },
+      'hidrogen peroksida': { name: 'Hidrogen Peroksida (H₂O₂)', type: 'asam', ph: 4, description: 'Oksidator dan disinfektan.' },
+      'h2o2': { name: 'Hidrogen Peroksida (H₂O₂)', type: 'asam', ph: 4, description: 'Pemutih dan antiseptik.' },
+      'h2o2 3%': { name: 'Hidrogen Peroksida 3%', type: 'asam', ph: 5, description: 'Antiseptik untuk luka.' },
+      'air oksigen': { name: 'Air Oksigen (H₂O₂)', type: 'asam', ph: 4, description: 'Pemutih rambut dan disinfektan.' },
+      'kalium permanganat': { name: 'Kalium Permanganat (KMnO₄)', type: 'netral', ph: 7, description: 'Oksidator kuat berwarna ungu.' },
+      'kmno4': { name: 'Kalium Permanganat (KMnO₄)', type: 'netral', ph: 7, description: 'Desinfektan dan oksidator.' },
+      'kalium dikromat': { name: 'Kalium Dikromat (K₂Cr₂O₇)', type: 'asam', ph: 2, description: 'Oksidator kuat berwarna oranye.' },
+      'k2cr2o7': { name: 'Kalium Dikromat (K₂Cr₂O₇)', type: 'asam', ph: 2, description: 'Bahan laboratorium yang beracun.' },
+      'natrium tiosulfat': { name: 'Natrium Tiosulfat (Na₂S₂O₃)', type: 'basa', ph: 8, description: 'Penetral klorin dan fixer foto.' },
+      'na2s2o3': { name: 'Natrium Tiosulfat', type: 'basa', ph: 8, description: 'Hypo untuk fotografi.' },
+      'hypo': { name: 'Hypo (Natrium Tiosulfat)', type: 'basa', ph: 8, description: 'Fixer dalam fotografi analog.' },
+      'perak nitrat': { name: 'Perak Nitrat (AgNO₃)', type: 'asam', ph: 5, description: 'Garam perak untuk antiseptik.' },
+      'agno3': { name: 'Perak Nitrat (AgNO₃)', type: 'asam', ph: 5, description: 'Bahan fotografi dan medis.' },
+      'tembaga sulfat': { name: 'Tembaga Sulfat (CuSO₄)', type: 'asam', ph: 4, description: 'Garam tembaga biru untuk fungisida.' },
+      'cuso4': { name: 'Tembaga Sulfat (CuSO₄)', type: 'asam', ph: 4, description: 'Vitriol biru.' },
+      'biru vitriol': { name: 'Biru Vitriol (CuSO₄)', type: 'asam', ph: 4, description: 'Tembaga sulfat kristal biru.' },
+      'besi sulfat': { name: 'Besi Sulfat (FeSO₄)', type: 'asam', ph: 4, description: 'Suplemen zat besi.' },
+      'feso4': { name: 'Besi Sulfat (FeSO₄)', type: 'asam', ph: 4, description: 'Vitriol hijau.' },
+      'seng sulfat': { name: 'Seng Sulfat (ZnSO₄)', type: 'asam', ph: 5, description: 'Suplemen zinc.' },
+      'znso4': { name: 'Seng Sulfat (ZnSO₄)', type: 'asam', ph: 5, description: 'Garam seng untuk suplemen.' },
+      'amonium sulfat': { name: 'Amonium Sulfat ((NH₄)₂SO���)', type: 'asam', ph: 5, description: 'Pupuk nitrogen.' },
+      '(nh4)2so4': { name: 'Amonium Sulfat', type: 'asam', ph: 5, description: 'Pupuk nitrogen asam.' },
+      'amonium nitrat': { name: 'Amonium Nitrat (NH₄NO₃)', type: 'asam', ph: 5, description: 'Pupuk dan bahan peledak.' },
+      'nh4no3': { name: 'Amonium Nitrat', type: 'asam', ph: 5, description: 'Pupuk dengan kandungan nitrogen tinggi.' },
+      'amonium klorida': { name: 'Amonium Klorida (NH₄Cl)', type: 'asam', ph: 5, description: 'Garam amonium untuk baterai.' },
+      'nh4cl': { name: 'Amonium Klorida (NH₄Cl)', type: 'asam', ph: 5, description: 'Sal amoniak.' },
+      'kalsium karbida': { name: 'Kalsium Karbida (CaC₂)', type: 'basa', ph: 12, description: 'Untuk membuat gas asetilena.' },
+      'cac2': { name: 'Kalsium Karbida (CaC₂)', type: 'basa', ph: 12, description: 'Karbit untuk las.' },
+      'karbit': { name: 'Karbit (CaC₂)', type: 'basa', ph: 12, description: 'Kalsium karbida untuk lampu.' },
+      'natrium sianida': { name: 'Natrium Sianida (NaCN)', type: 'basa', ph: 11, description: 'Racun kuat untuk ekstraksi emas.' },
+      'nacn': { name: 'Natrium Sianida (NaCN)', type: 'basa', ph: 11, description: 'Garam sianida yang sangat beracun.' },
+      'kalium sianida': { name: 'Kalium Sianida (KCN)', type: 'basa', ph: 11, description: 'Racun kuat untuk elektroplating.' },
+      'kcn': { name: 'Kalium Sianida (KCN)', type: 'basa', ph: 11, description: 'Garam sianida yang sangat beracun.' },
+      'merkuri klorida': { name: 'Merkuri Klorida (HgCl₂)', type: 'asam', ph: 3, description: 'Garam merkuri yang sangat beracun.' },
+      'hgcl2': { name: 'Merkuri Klorida (HgCl₂)', type: 'asam', ph: 3, description: 'Sublimat korosif.' },
+      'timbal asetat': { name: 'Timbal Asetat (Pb(CH₃COO)₂)', type: 'asam', ph: 5, description: 'Garam timbal yang beracun.' },
+      'pb(ch3coo)2': { name: 'Timbal Asetat', type: 'asam', ph: 5, description: 'Gula timbal yang manis tapi beracun.' },
+      'natrium fluorida': { name: 'Natrium Fluorida (NaF)', type: 'basa', ph: 9, description: 'Fluorida untuk pasta gigi.' },
+      'naf': { name: 'Natrium Fluorida (NaF)', type: 'basa', ph: 9, description: 'Pencegah gigi berlubang.' },
+      'kalsium fluorida': { name: 'Kalsium Fluorida (CaF₂)', type: 'netral', ph: 7, description: 'Mineral fluorit.' },
+      'caf2': { name: 'Kalsium Fluorida (CaF₂)', type: 'netral', ph: 7, description: 'Fluorit untuk optik.' },
+      'natrium fosfat': { name: 'Natrium Fosfat (Na₃PO₄)', type: 'basa', ph: 12, description: 'Pembersih alkali kuat.' },
+      'na3po4': { name: 'Natrium Fosfat (Na₃PO₄)', type: 'basa', ph: 12, description: 'TSP untuk pembersih.' },
+      'tsp': { name: 'TSP (Trisodium Phosphate)', type: 'basa', ph: 12, description: 'Pembersih industri yang kuat.' },
+      'kalsium oksida': { name: 'Kalsium Oksida (CaO)', type: 'basa', ph: 12, description: 'Kapur tohor untuk semen.' },
+      'cao': { name: 'Kalsium Oksida (CaO)', type: 'basa', ph: 12, description: 'Quicklime yang sangat reaktif.' },
+      'kapur tohor': { name: 'Kapur Tohor (CaO)', type: 'basa', ph: 12, description: 'Kalsium oksida murni.' },
+      'magnesium oksida': { name: 'Magnesium Oksida (MgO)', type: 'basa', ph: 10, description: 'Antasida dan suplemen magnesium.' },
+      'mgo': { name: 'Magnesium Oksida (MgO)', type: 'basa', ph: 10, description: 'Magnesia.' },
+      'barium sulfat': { name: 'Barium Sulfat (BaSO₄)', type: 'netral', ph: 7, description: 'Kontras untuk rontgen.' },
+      'baso4': { name: 'Barium Sulfat (BaSO₄)', type: 'netral', ph: 7, description: 'Media kontras radiologi.' },
+      'kloroform': { name: 'Kloroform (CHCl₃)', type: 'netral', ph: 7, description: 'Pelarut dan anestesi lama.' },
+      'chcl3': { name: 'Kloroform (CHCl₃)', type: 'netral', ph: 7, description: 'Triklormetan.' },
+      'karbon tetraklorida': { name: 'Karbon Tetraklorida (CCl₄)', type: 'netral', ph: 7, description: 'Pelarut yang karsinogenik.' },
+      'ccl4': { name: 'Karbon Tetraklorida (CCl₄)', type: 'netral', ph: 7, description: 'Tetraklormetan.' },
+      'dietil eter': { name: 'Dietil Eter ((C₂H₅)₂O)', type: 'netral', ph: 7, description: 'Anestesi dan pelarut.' },
+      '(c2h5)2o': { name: 'Dietil Eter', type: 'netral', ph: 7, description: 'Eter untuk ekstraksi.' },
+      'eter': { name: 'Eter (Dietil Eter)', type: 'netral', ph: 7, description: 'Pelarut organik volatil.' },
+      'dimetil sulfoksida': { name: 'DMSO (Dimetil Sulfoksida)', type: 'netral', ph: 7, description: 'Pelarut polar aprotik.' },
+      'dmso': { name: 'DMSO', type: 'netral', ph: 7, description: 'Pelarut untuk obat topikal.' },
+      '(ch3)2so': { name: 'DMSO ((CH₃)₂SO)', type: 'netral', ph: 7, description: 'Dimetil sulfoksida.' },
+      'etilen glikol': { name: 'Etilen Glikol (C₂H₆O₂)', type: 'netral', ph: 7, description: 'Antibeku radiator.' },
+      'c2h6o2': { name: 'Etilen Glikol (C₂H₆O₂)', type: 'netral', ph: 7, description: 'Cairan antibeku yang manis.' },
+      'antibeku': { name: 'Antibeku (Etilen Glikol)', type: 'netral', ph: 7, description: 'Cairan radiator mobil.' },
+      'propilen glikol': { name: 'Propilen Glikol (C₃H₈O₂)', type: 'netral', ph: 7, description: 'Pelarut makanan dan kosmetik.' },
+      'c3h8o2': { name: 'Propilen Glikol (C₃H₈O₂)', type: 'netral', ph: 7, description: 'Humektan yang aman.' },
+      'polietilen glikol': { name: 'Polietilen Glikol (PEG)', type: 'netral', ph: 7, description: 'Polimer untuk obat pencahar.' },
+      'peg': { name: 'PEG (Polietilen Glikol)', type: 'netral', ph: 7, description: 'Polimer larut air.' },
+      'sorbitol': { name: 'Sorbitol (C₆H₁₄O₆)', type: 'netral', ph: 7, description: 'Pemanis alkohol gula.' },
+      'c6h14o6': { name: 'Sorbitol (C₆H₁₄O₆)', type: 'netral', ph: 7, description: 'Humektan dan pemanis.' },
+      'xylitol': { name: 'Xylitol (C₅H₁₂O₅)', type: 'netral', ph: 7, description: 'Pemanis untuk gigi sehat.' },
+      'c5h12o5': { name: 'Xylitol (C₅H₁₂O₅)', type: 'netral', ph: 7, description: 'Alkohol gula dari xilan.' },
+      'manitol': { name: 'Manitol (C₆H₁₄O₆)', type: 'netral', ph: 7, description: 'Diuretik osmotik.' },
+      'eritritol': { name: 'Eritritol (C₄H₁₀O₄)', type: 'netral', ph: 7, description: 'Pemanis rendah kalori.' },
+      'c4h10o4': { name: 'Eritritol (C₄H₁₀O₄)', type: 'netral', ph: 7, description: 'Alkohol gula alami.' },
+      'aspartam': { name: 'Aspartam', type: 'asam', ph: 5, description: 'Pemanis buatan rendah kalori.' },
+      'sakarin': { name: 'Sakarin', type: 'asam', ph: 2, description: 'Pemanis buatan tertua.' },
+      'sukralosa': { name: 'Sukralosa', type: 'netral', ph: 7, description: 'Pemanis buatan dari sukrosa.' },
+      'stevia': { name: 'Stevia', type: 'netral', ph: 7, description: 'Pemanis alami dari daun stevia.' },
+      'gula aren': { name: 'Gula Aren', type: 'netral', ph: 7, description: 'Gula merah dari pohon aren.' },
+      'gula kelapa': { name: 'Gula Kelapa', type: 'netral', ph: 7, description: 'Gula merah dari kelapa.' },
+      'gula merah': { name: 'Gula Merah', type: 'netral', ph: 7, description: 'Gula dari tebu atau kelapa.' },
+      'gula jawa': { name: 'Gula Jawa', type: 'netral', ph: 7, description: 'Gula merah tradisional.' },
+      'madu manuka': { name: 'Madu Manuka', type: 'asam', ph: 4, description: 'Madu premium dari Selandia Baru.' },
+      'madu kelulut': { name: 'Madu Kelulut', type: 'asam', ph: 4, description: 'Madu dari lebah tanpa sengat.' },
+      'propolis': { name: 'Propolis', type: 'asam', ph: 5, description: 'Resin lebah untuk antibiotik alami.' },
+      'royal jelly': { name: 'Royal Jelly', type: 'asam', ph: 4, description: 'Susu lebah untuk ratu.' },
+      'bee pollen': { name: 'Bee Pollen', type: 'netral', ph: 7, description: 'Serbuk sari lebah yang kaya nutrisi.' }
+    };
+
+    // Default configuration
+    const defaultConfig = {
+      app_title: '🧪 Cek Sifat Larutan',
+      subtitle_text: 'Masukkan nama larutan untuk mengetahui sifatnya',
+      input_placeholder: 'Contoh: HCl, NaOH, H2O, Cuka, dll...',
+      button_text: '🔬 Cek Sifat Larutan',
+      background_color: '#667eea',
+      surface_color: '#ffffff',
+      text_color: '#1f2937',
+      primary_action_color: '#4f46e5',
+      secondary_action_color: '#7c3aed'
+    };
+
+    let config = { ...defaultConfig };
+
+    // Function to check solution
+    function checkSolution() {
+      const input = document.getElementById('solution-input').value.trim().toLowerCase();
+      const resultContainer = document.getElementById('result-container');
+      
+      if (!input) {
+        showError('Silakan masukkan nama larutan terlebih dahulu!');
+        return;
+      }
+      
+      const solution = solutionDatabase[input];
+      
+      if (solution) {
+        showResult(solution);
+      } else {
+        showNotFound(input);
+      }
+    }
+
+    function showResult(solution) {
+      const resultContainer = document.getElementById('result-container');
+      const resultCard = document.getElementById('result-card');
+      const resultIcon = document.getElementById('result-icon');
+      const resultName = document.getElementById('result-name');
+      const resultType = document.getElementById('result-type');
+      const resultPh = document.getElementById('result-ph');
+      const resultDescription = document.getElementById('result-description');
+      const phIndicator = document.getElementById('ph-indicator');
+      
+      // Set styling based on type
+      let bgColor, textColor, icon, typeText;
+      
+      if (solution.type === 'asam') {
+        bgColor = 'bg-gradient-to-br from-red-100 to-red-200';
+        textColor = 'text-red-700';
+        icon = '🔴';
+        typeText = 'ASAM';
+      } else if (solution.type === 'basa') {
+        bgColor = 'bg-gradient-to-br from-blue-100 to-blue-200';
+        textColor = 'text-blue-700';
+        icon = '🔵';
+        typeText = 'BASA';
+      } else {
+        bgColor = 'bg-gradient-to-br from-green-100 to-green-200';
+        textColor = 'text-green-700';
+        icon = '🟢';
+        typeText = 'NETRAL';
+      }
+      
+      // Update content
+      resultCard.className = `result-card rounded-2xl p-6 text-center ${bgColor}`;
+      resultIcon.textContent = icon;
+      resultName.textContent = solution.name;
+      resultName.className = `text-xl font-bold mb-2 ${textColor}`;
+      resultType.textContent = typeText;
+      resultType.className = `text-3xl font-bold mb-3 ${textColor}`;
+      resultPh.textContent = `pH: ${solution.ph}`;
+      resultPh.className = `text-lg mb-4 ${textColor}`;
+      resultDescription.textContent = solution.description;
+      resultDescription.className = `text-sm opacity-90 ${textColor}`;
+      
+      // Update pH indicator position
+      const phPosition = (solution.ph / 14) * 100;
+      phIndicator.style.left = `${phPosition}%`;
+      
+      // Show result
+      resultContainer.classList.remove('hidden');
+      resultCard.classList.remove('result-card');
+      void resultCard.offsetWidth; // Trigger reflow
+      resultCard.classList.add('result-card');
+    }
+
+    function showNotFound(input) {
+      const resultContainer = document.getElementById('result-container');
+      const resultCard = document.getElementById('result-card');
+      const resultIcon = document.getElementById('result-icon');
+      const resultName = document.getElementById('result-name');
+      const resultType = document.getElementById('result-type');
+      const resultPh = document.getElementById('result-ph');
+      const resultDescription = document.getElementById('result-description');
+      const phIndicator = document.getElementById('ph-indicator');
+      
+      resultCard.className = 'result-card rounded-2xl p-6 text-center bg-gradient-to-br from-gray-100 to-gray-200';
+      resultIcon.textContent = '❓';
+      resultName.textContent = `"${input}"`;
+      resultName.className = 'text-xl font-bold mb-2 text-gray-700';
+      resultType.textContent = 'TIDAK DITEMUKAN';
+      resultType.className = 'text-2xl font-bold mb-3 text-gray-600';
+      resultPh.textContent = '';
+      resultDescription.textContent = 'Larutan tidak ada dalam database. Coba masukkan nama atau rumus kimia yang berbeda.';
+      resultDescription.className = 'text-sm opacity-90 text-gray-600';
+      phIndicator.style.left = '50%';
+      
+      resultContainer.classList.remove('hidden');
+      resultCard.classList.remove('result-card');
+      void resultCard.offsetWidth;
+      resultCard.classList.add('result-card');
+    }
+
+    function showError(message) {
+      const resultContainer = document.getElementById('result-container');
+      const resultCard = document.getElementById('result-card');
+      const resultIcon = document.getElementById('result-icon');
+      const resultName = document.getElementById('result-name');
+      const resultType = document.getElementById('result-type');
+      const resultPh = document.getElementById('result-ph');
+      const resultDescription = document.getElementById('result-description');
+      
+      resultCard.className = 'result-card rounded-2xl p-6 text-center bg-gradient-to-br from-yellow-100 to-yellow-200';
+      resultIcon.textContent = '⚠️';
+      resultName.textContent = 'Perhatian';
+      resultName.className = 'text-xl font-bold mb-2 text-yellow-700';
+      resultType.textContent = '';
+      resultPh.textContent = '';
+      resultDescription.textContent = message;
+      resultDescription.className = 'text-sm opacity-90 text-yellow-700';
+      
+      resultContainer.classList.remove('hidden');
+    }
+
+    // Handle enter key
+    document.getElementById('solution-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkSolution();
+      }
+    });
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          
+          // Update UI elements
+          document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+          document.getElementById('subtitle').textContent = config.subtitle_text || defaultConfig.subtitle_text;
+          document.getElementById('solution-input').placeholder = config.input_placeholder || defaultConfig.input_placeholder;
+          document.getElementById('check-btn').textContent = config.button_text || defaultConfig.button_text;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['app_title', config.app_title || defaultConfig.app_title],
+          ['subtitle_text', config.subtitle_text || defaultConfig.subtitle_text],
+          ['input_placeholder', config.input_placeholder || defaultConfig.input_placeholder],
+          ['button_text', config.button_text || defaultConfig.button_text]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c87f65ad12a8247',t:'MTc3MDE4NDk4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
