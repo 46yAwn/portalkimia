@@ -163,10 +163,10 @@
     <div class="bubble" style="width: 60px; height: 60px; top: 45%; left: 45%; animation-delay: 4.5s; background: radial-gradient(circle, rgba(255,170,0,0.3), transparent);"></div>
     <div class="bubble" style="width: 110px; height: 110px; top: 60%; right: 8%; animation-delay: 1s; background: radial-gradient(circle, rgba(0,153,255,0.3), transparent);"></div>
    </div>
-   <div class="relative z-10 max-w-7xl mx-auto px-4 py-10"><!-- Enhand Header -->
+   <div class="relative z-10 max-w-7xl mx-auto px-4 py-10"><!-- Enhanced Header -->
     <header class="text-center mb-12">
      <div class="inline-flex items-center gap-4 mb-6"><!-- Enhanced Flask Icon SVG -->
-      <svg class="w-20 h-20 animate-pulse-slow" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/ce2000/svg"><defs>
+      <svg class="w-20 h-20 animate-pulse-slow" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
         <lineargradient id="flaskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
          <stop offset="0%" stop-color="#00e5ff" />
          <stop offset="50%" stop-color="#b842ff" />
@@ -176,7 +176,7 @@
       </svg>
       <div>
        <h1 id="main-title" class="text-5xl md:text-7xl font-black gradient-text mb-2">pH Meter Interaktif</h1>
-       <p id="subtitle" class="text-xl md:text-2xl font-semibold" style="background: linear-gradient(90deg, #00e5ff, #ffd23f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cek tingkat keasaman larutan Anda</p>
+       <p id="subtitle" class="text-xl md:text-2xl font-semibold" style="background: linear-gradient(90deg, #00e5ff, #ffd23f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cek tingkat keasaman larutan</p>
       </div>
      </div>
     </header><!-- Enhanced Main pH Meter Card -->
@@ -350,7 +350,8 @@
      <div class="relative">
       <div class="ph-gradient h-14 rounded-2xl mb-6"></div>
       <div class="grid grid-cols-15 gap-1 text-center text-xs font-bold">
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
+      <div class="flex flex-row flex-wrap justify-center gap-4">
+        <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
        </div>
        <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff1a52;">1</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lambung</span>
        </div>
@@ -381,6 +382,7 @@
        <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #cc00ff;">14</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">NaOH</span>
        </div>
       </div>
+      </div> 
      </div>
     </div><!-- Enhanced Formula Section -->
     <div class="glass-card rounded-3xl p-8">
@@ -410,7 +412,7 @@
   <script>
     const defaultConfig = {
       main_title: 'pH Meter Interaktif',
-      subtitle: 'Cek tingkat keasaman larutan'
+      subtitle: 'Cek tingkat keasaman larutan Anda'
     };
     
     const phData = {
