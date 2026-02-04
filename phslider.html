@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pH Meter Interaktif</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .ph-gradient {
+      background: linear-gradient(90deg, 
+        #ff0844 0%, 
+        #ff6b35 10%, 
+        #ffaa00 20%, 
+        #ffd23f 30%, 
+        #c3f73a 40%, 
+        #00e5a0 50%, 
+        #00d9ff 60%, 
+        #0099ff 70%, 
+        #6b5fff 80%, 
+        #b842ff 90%, 
+        #ff00ff 100%
+      );
+      box-shadow: 0 8px 32px rgba(255, 0, 136, 0.3);
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      animation: float 8s infinite ease-in-out;
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.4; }
+      50% { transform: translateY(-40px) rotate(180deg) scale(1.1); opacity: 0.8; }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.08); filter: brightness(1.2); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 0px transparent; }
+      50% { box-shadow: 0 0 0px transparent; }
+    }
+    
+    @keyframes droplet {
+      0% { transform: translateY(-25px) scale(0.8); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translateY(30px) scale(1.2); opacity: 0; }
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+    
+    .animate-pulse-slow {
+      animation: pulse 3s infinite ease-in-out;
+    }
+    
+    .animate-glow {
+      animation: glow 2s infinite ease-in-out;
+    }
+    
+    .droplet-animation {
+      animation: droplet 2.5s infinite ease-in-out;
+    }
+    
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.8);
+      border: 3px solid #1a1a2e;
+      transition: all 0.2s;
+    }
+    
+    .slider-thumb::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    
+    .slider-thumb::-moz-range-thumb {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff, #f0f0f0);
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.8);
+      border: 3px solid #1a1a2e;
+    }
+    
+    .glass-card {
+      background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(40, 40, 65, 0.95));
+      backdrop-filter: blur(30px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .info-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .info-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+    
+    .info-card:hover::before {
+      left: 100%;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #00e5ff, #b842ff, #ff0088);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 100%;
+    }
+    
+    .simple-border {
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 35%, #24243e 100%);"><!-- Enhanced Floating Bubbles Background -->
+   <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="bubble" style="width: 120px; height: 120px; top: 5%; left: 8%; animation-delay: 0s; background: radial-gradient(circle, rgba(0,229,255,0.3), transparent);"></div>
+    <div class="bubble" style="width: 80px; height: 80px; top: 15%; right: 12%; animation-delay: 1.5s; background: radial-gradient(circle, rgba(184,66,255,0.3), transparent);"></div>
+    <div class="bubble" style="width: 150px; height: 150px; bottom: 15%; left: 10%; animation-delay: 2.5s; background: radial-gradient(circle, rgba(255,0,136,0.3), transparent);"></div>
+    <div class="bubble" style="width: 90px; height: 90px; bottom: 25%; right: 15%; animation-delay: 3.5s; background: radial-gradient(circle, rgba(195,247,58,0.3), transparent);"></div>
+    <div class="bubble" style="width: 60px; height: 60px; top: 45%; left: 45%; animation-delay: 4.5s; background: radial-gradient(circle, rgba(255,170,0,0.3), transparent);"></div>
+    <div class="bubble" style="width: 110px; height: 110px; top: 60%; right: 8%; animation-delay: 1s; background: radial-gradient(circle, rgba(0,153,255,0.3), transparent);"></div>
+   </div>
+   <div class="relative z-10 max-w-7xl mx-auto px-4 py-10"><!-- Enhanced Header -->
+    <header class="text-center mb-12">
+     <div class="inline-flex items-center gap-4 mb-6"><!-- Enhanced Flask Icon SVG -->
+      <svg class="w-20 h-20 animate-pulse-slow" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+        <lineargradient id="flaskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+         <stop offset="0%" stop-color="#00e5ff" />
+         <stop offset="50%" stop-color="#b842ff" />
+         <stop offset="100%" stop-color="#ff0088" />
+        </lineargradient>
+       </defs> <path d="M24 8V24L12 44C10 48 13 52 18 52H46C51 52 54 48 52 44L40 24V8" stroke="url(#flaskGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /> <path d="M20 8H44" stroke="url(#flaskGradient)" stroke-width="4" stroke-linecap="round" /> <circle cx="26" cy="40" r="5" fill="#ff0088" opacity="0.8" /> <circle cx="38" cy="36" r="4" fill="#00e5ff" opacity="0.8" /> <circle cx="32" cy="44" r="6" fill="#ffd23f" opacity="0.8" /> <path class="droplet-animation" d="M32 16L35 24L32 30L29 24L32 16Z" fill="#b842ff" />
+      </svg>
+      <div>
+       <h1 id="main-title" class="text-5xl md:text-7xl font-black gradient-text mb-2">pH Meter Interaktif</h1>
+       <p id="subtitle" class="text-xl md:text-2xl font-semibold" style="background: linear-gradient(90deg, #00e5ff, #ffd23f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cek tingkat keasaman larutan Anda</p>
+      </div>
+     </div>
+    </header><!-- Enhanced Main pH Meter Card -->
+    <div class="glass-card simple-border rounded-3xl shadow-2xl p-10 mb-10"><!-- Enhanced pH Display -->
+     <div class="text-center mb-10">
+      <div class="inline-block relative">
+       <div id="ph-display" class="text-9xl md:text-[12rem] font-black gradient-text">
+        7.0
+       </div><span class="absolute -top-4 -right-10 text-3xl font-bold" style="color: #b842ff;">pH</span>
+      </div>
+      <p id="ph-status" class="text-3xl font-bold mt-4" style="color: #ffffff;">Netral</p>
+      <p id="ph-description" class="text-lg mt-2 max-w-2xl mx-auto" style="color: rgba(255,255,255,0.7);">Air murni, tidak bersifat asam maupun basa</p>
+     </div><!-- Enhanced pH Slider -->
+     <div class="mb-10">
+      <div class="relative mb-8">
+       <div class="ph-gradient h-16 rounded-full relative shadow-2xl"><input type="range" id="ph-slider" min="0" max="14" step="0.1" value="7" class="slider-thumb absolute inset-0 w-full h-full cursor-pointer" style="opacity: 1; background: transparent;"> <!-- pH markers -->
+        <div class="absolute inset-0 flex justify-between items-center px-3 pointer-events-none">
+         <div class="w-1 h-8 bg-white opacity-70 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-10 bg-white opacity-80 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-12 bg-white opacity-90 rounded-full shadow-lg"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-10 bg-white opacity-80 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-8 bg-white opacity-70 rounded-full"></div>
+        </div>
+       </div>
+      </div>
+      <div class="grid grid-cols-3 gap-6 text-center mb-6">
+       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(255,8,68,0.25), rgba(255,107,53,0.25)); border: 2px solid #ff0844;">
+        <div class="text-5xl mb-2">
+         🔥
+        </div>
+        <div class="font-black text-xl mb-1" style="color: #ff0844;">
+         ASAM
+        </div>
+        <div class="font-bold text-lg" style="color: #ffffff;">
+         pH 0 - 6.9
+        </div>
+        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
+         Ion H⁺ Dominan
+        </div>
+       </div>
+       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(0,229,160,0.25), rgba(195,247,58,0.25)); border: 2px solid #00e5a0;">
+        <div class="text-5xl mb-2">
+         💧
+        </div>
+        <div class="font-black text-xl mb-1" style="color: #00e5a0;">
+         NETRAL
+        </div>
+        <div class="font-bold text-lg" style="color: #ffffff;">
+         pH = 7
+        </div>
+        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
+         H⁺ = OH⁻ Seimbang
+        </div>
+       </div>
+       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(184,66,255,0.25), rgba(107,95,255,0.25)); border: 2px solid #b842ff;">
+        <div class="text-5xl mb-2">
+         ⚡
+        </div>
+        <div class="font-black text-xl mb-1" style="color: #b842ff;">
+         BASA
+        </div>
+        <div class="font-bold text-lg" style="color: #ffffff;">
+         pH 7.1 - 14
+        </div>
+        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
+         Ion OH⁻ Dominan
+        </div>
+       </div>
+      </div>
+     </div><!-- Enhanced Liquid Indicator -->
+     <div class="flex justify-center mb-8">
+      <div class="relative"><!-- Enhanced Test Tube SVG -->
+       <svg class="w-40 h-56" viewbox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+         <lineargradient id="liquidGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" id="liquid-color-top" stop-color="#00e5a0" />
+          <stop offset="100%" id="liquid-color-bottom" stop-color="#00aa70" />
+         </lineargradient>
+         <lineargradient id="tubeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,0.1)" />
+         </lineargradient>
+         <filter id="glow">
+          <fegaussianblur stddeviation="3" result="coloredBlur" />
+          <femerge>
+           <femergenode in="coloredBlur" />
+           <femergenode in="SourceGraphic" />
+          </femerge>
+         </filter>
+         <clippath id="tubeClip">
+          <path d="M30 20 L30 110 Q30 130 50 130 Q70 130 70 110 L70 20" />
+         </clippath>
+        </defs> <!-- Tube Outer Glow --> <path d="M25 15 L25 110 Q25 135 50 135 Q75 135 75 110 L75 15" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="6" /> <!-- Tube Background --> <path d="M25 15 L25 110 Q25 135 50 135 Q75 135 75 110 L75 15" fill="rgba(255,255,255,0.15)" stroke="url(#tubeGlow)" stroke-width="3" /> <!-- Liquid with glow --> <rect id="liquid-level" x="30" y="40" width="40" height="90" fill="url(#liquidGradient)" clip-path="url(#tubeClip)" rx="5" /> <!-- Enhanced Bubbles in liquid --> <circle class="bubble" cx="40" cy="75" r="4" fill="rgba(255,255,255,0.6)" style="animation-duration: 2.2s;" /> <circle class="bubble" cx="56" cy="95" r="5" fill="rgba(255,255,255,0.5)" style="animation-duration: 3.1s;" /> <circle class="bubble" cx="60" cy="65" r="3" fill="rgba(255,255,255,0.7)" style="animation-duration: 2.7s;" /> <circle class="bubble" cx="45" cy="105" r="3.5" fill="rgba(255,255,255,0.6)" style="animation-duration: 2.5s;" /> <!-- Tube Opening with glow --> <ellipse cx="50" cy="15" rx="25" ry="5" fill="rgba(255,255,255,0.4)" stroke="url(#tubeGlow)" stroke-width="3" /> <!-- Measurement Lines --> <line x1="75" y1="40" x2="85" y2="40" stroke="rgba(255,255,255,0.8)" stroke-width="2" /> <line x1="75" y1="60" x2="82" y2="60" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" /> <line x1="75" y1="80" x2="85" y2="80" stroke="rgba(255,255,255,0.8)" stroke-width="2" /> <line x1="75" y1="100" x2="82" y2="100" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" /> <line x1="75" y1="120" x2="85" y2="120" stroke="rgba(255,255,255,0.8)" stroke-width="2" />
+       </svg>
+      </div>
+     </div><!-- Enhanced Quick Select Buttons -->
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-4"><button onclick="setPH(1)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #ff0844, #ff6b35); box-shadow: 0 8px 25px rgba(255,8,68,0.4);"> 🍋 Asam Lambung<br><span class="text-sm opacity-90">(pH 1)</span> </button> <button onclick="setPH(2.5)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #ffaa00, #ffd23f); box-shadow: 0 8px 25px rgba(255,170,0,0.4);"> 🍊 Jus Jeruk<br><span class="text-sm opacity-90">(pH 2.5)</span> </button> <button onclick="setPH(7)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #00e5a0, #c3f73a); box-shadow: 0 8px 25px rgba(0,229,160,0.4);"> 💧 Air Murni<br><span class="text-sm opacity-90">(pH 7)</span> </button> <button onclick="setPH(13)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #b842ff, #6b5fff); box-shadow: 0 8px 25px rgba(184,66,255,0.4);"> 🧼 Pemutih<br><span class="text-sm opacity-90">(pH 13)</span> </button>
+     </div>
+    </div><!-- Enhanced Info Cards -->
+    <div class="grid md:grid-cols-3 gap-8 mb-10"><!-- Asam Card -->
+     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #ff0844; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+      <div class="flex items-center gap-4 mb-5">
+       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #ff0844, #ff6b35);">
+        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L15 8H9L12 2Z" /> <circle cx="12" cy="15" r="6" /> <path d="M12 12V18M9 15H15" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-black" style="color: #ff0844;">Larutan Asam</h3>
+      </div>
+      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH 0 - 6.9</p>
+      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+       <li class="font-semibold">🔬 Mengandung ion H⁺ berlebih</li>
+       <li class="font-semibold">⚡ Dapat menghantarkan listrik</li>
+       <li class="font-semibold">🧪 Bereaksi dengan logam</li>
+       <li class="font-semibold">📝 Mengubah lakmus biru → merah</li>
+      </ul>
+      <div class="mt-5 p-4 rounded-xl" style="background: rgba(255,8,68,0.15);">
+       <p class="text-sm font-black mb-2" style="color: #ff0844;">Contoh Larutan:</p>
+       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Cuka, jus lemon, asam lambung, cola, baterai aki</p>
+      </div>
+     </div><!-- Netral Card -->
+     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #00e5a0; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+      <div class="flex items-center gap-4 mb-5">
+       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #00e5a0, #c3f73a);">
+        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" /> <path d="M12 8V16M8 12H16" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-black" style="color: #00e5a0;">Larutan Netral</h3>
+      </div>
+      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH = 7</p>
+      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+       <li class="font-semibold">⚖️ Keseimbangan ion H⁺ dan OH⁻</li>
+       <li class="font-semibold">💧 Tidak korosif</li>
+       <li class="font-semibold">🌱 Aman untuk kehidupan</li>
+       <li class="font-semibold">📝 Tidak mengubah lakmus</li>
+      </ul>
+      <div class="mt-5 p-4 rounded-xl" style="background: rgba(0,229,160,0.15);">
+       <p class="text-sm font-black mb-2" style="color: #00e5a0;">Contoh Larutan:</p>
+       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Air murni, air suling, garam dapur, darah manusia (~7.4)</p>
+      </div>
+     </div><!-- Basa Card -->
+     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #b842ff; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+      <div class="flex items-center gap-4 mb-5">
+       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #b842ff, #6b5fff);">
+        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22L8 16H16L12 22Z" /> <circle cx="12" cy="9" r="6" /> <path d="M9 9H15" />
+        </svg>
+       </div>
+       <h3 class="text-2xl font-black" style="color: #b842ff;">Larutan Basa</h3>
+      </div>
+      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH 7.1 - 14</p>
+      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+       <li class="font-semibold">🔬 Mengandung ion OH⁻ berlebih</li>
+       <li class="font-semibold">🧴 Terasa licin di kulit</li>
+       <li class="font-semibold">🧪 Bereaksi dengan lemak</li>
+       <li class="font-semibold">📝 Mengubah lakmus merah → biru</li>
+      </ul>
+      <div class="mt-5 p-4 rounded-xl" style="background: rgba(184,66,255,0.15);">
+       <p class="text-sm font-black mb-2" style="color: #b842ff;">Contoh Larutan:</p>
+       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Sabun, pemutih, soda kue, amonia, air laut</p>
+      </div>
+     </div>
+    </div><!-- Enhanced pH Scale Reference -->
+    <div class="glass-card rounded-3xl p-8 mb-10 simple-border">
+     <h3 class="text-3xl font-black text-center mb-6 gradient-text">Skala pH Berbagai Zat</h3>
+     <div class="relative">
+      <div class="ph-gradient h-14 rounded-2xl mb-6"></div>
+      <div class="grid grid-cols-15 gap-1 text-center text-xs font-bold">
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff1a52;">1</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lambung</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff4d5e;">2</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lemon</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff7a40;">3</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Cuka</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ffa61a;">4</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Tomat</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ffc825;">5</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Kopi</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #d9f030;">6</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Susu</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00e5a0;">7</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Air</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00ddc7;">8</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Laut</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00cbee;">9</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Soda</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00aaff;">10</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Antasida</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #3388ff;">11</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Amonia</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #6b5fff;">12</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Sabun</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #9944ff;">13</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Pemutih</span>
+       </div>
+       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #cc00ff;">14</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">NaOH</span>
+       </div>
+      </div>
+     </div>
+    </div><!-- Enhanced Formula Section -->
+    <div class="glass-card rounded-3xl p-8">
+     <h3 class="text-3xl font-black text-center mb-8 gradient-text">🧮 Rumus Perhitungan pH</h3>
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="rounded-2xl p-6" style="background: rgba(255,8,68,0.15); border: 3px solid #ff0844;">
+       <h4 class="font-black text-2xl mb-4" style="color: #ff0844;">Menghitung pH</h4>
+       <div class="rounded-xl p-6 text-center font-mono text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
+        pH = -log [H⁺]
+       </div>
+       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Di mana [H⁺] adalah konsentrasi ion hidrogen dalam mol/L. Semakin tinggi [H⁺], semakin rendah pH (lebih asam).</p>
+      </div>
+      <div class="rounded-2xl p-6" style="background: rgba(184,66,255,0.15); border: 3px solid #b842ff;">
+       <h4 class="font-black text-2xl mb-4" style="color: #b842ff;">Menghitung pOH</h4>
+       <div class="rounded-xl p-6 text-center font-mono text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
+        pOH = -log [OH⁻]
+       </div>
+       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Hubungan: pH + pOH = 14 (pada suhu 25°C). Semakin tinggi [OH⁻], semakin tinggi pOH (lebih basa).</p>
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="text-center mt-10 text-lg font-semibold" style="color: rgba(255,255,255,0.7);">
+     <p>✨ Geser slider untuk mengecek nilai pH atau klik tombol contoh zat ✨</p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: 'pH Meter Interaktif',
+      subtitle: 'Cek tingkat keasaman larutan Anda'
+    };
+    
+    const phData = {
+      0: { status: 'Sangat Asam', desc: 'Asam kuat seperti asam sulfat, sangat korosif dan berbahaya', colors: ['#ff0844', '#cc0636'] },
+      1: { status: 'Sangat Asam', desc: 'Setara asam lambung, dapat melarutkan logam', colors: ['#ff1a52', '#cc1541'] },
+      2: { status: 'Asam Kuat', desc: 'Setara jus lemon atau cuka, asam organik', colors: ['#ff4d5e', '#cc3e4b'] },
+      3: { status: 'Asam', desc: 'Setara jus jeruk atau soda, rasa asam terasa jelas', colors: ['#ff7a40', '#cc6133'] },
+      4: { status: 'Asam Lemah', desc: 'Setara jus tomat atau bir, asam ringan', colors: ['#ffa61a', '#cc8515'] },
+      5: { status: 'Asam Lemah', desc: 'Setara kopi hitam atau pisang, sedikit asam', colors: ['#ffc825', '#cca01d'] },
+      6: { status: 'Asam Sangat Lemah', desc: 'Setara susu atau air liur, hampir netral', colors: ['#d9f030', '#aec026'] },
+      7: { status: 'Netral', desc: 'Air murni, tidak bersifat asam maupun basa', colors: ['#00e5a0', '#00b77f'] },
+      8: { status: 'Basa Sangat Lemah', desc: 'Setara air laut atau telur, sedikit basa', colors: ['#00ddc7', '#00b19f'] },
+      9: { status: 'Basa Lemah', desc: 'Setara soda kue, basa ringan', colors: ['#00cbee', '#00a2be'] },
+      10: { status: 'Basa Lemah', desc: 'Setara susu magnesia atau antasida', colors: ['#00aaff', '#0088cc'] },
+      11: { status: 'Basa', desc: 'Setara amonia rumah tangga, cukup basa', colors: ['#3388ff', '#296dcc'] },
+      12: { status: 'Basa Kuat', desc: 'Setara sabun atau deterjen, basa kuat', colors: ['#6b5fff', '#564ccc'] },
+      13: { status: 'Sangat Basa', desc: 'Setara pemutih atau oven cleaner, korosif', colors: ['#9944ff', '#7a36cc'] },
+      14: { status: 'Sangat Basa', desc: 'Setara NaOH atau KOH, sangat korosif dan berbahaya', colors: ['#cc00ff', '#a300cc'] }
+    };
+    
+    function updatePHDisplay(value) {
+      const ph = parseFloat(value);
+      const phDisplay = document.getElementById('ph-display');
+      const phStatus = document.getElementById('ph-status');
+      const phDescription = document.getElementById('ph-description');
+      const liquidColorTop = document.getElementById('liquid-color-top');
+      const liquidColorBottom = document.getElementById('liquid-color-bottom');
+      
+      const roundedPH = Math.round(ph);
+      const data = phData[roundedPH];
+      
+      phDisplay.textContent = ph.toFixed(1);
+      phStatus.textContent = data.status;
+      phDescription.textContent = data.desc;
+      
+      liquidColorTop.setAttribute('stop-color', data.colors[0]);
+      liquidColorBottom.setAttribute('stop-color', data.colors[1]);
+      
+      // Update display gradient based on pH
+      if (ph < 3) {
+        phDisplay.style.background = 'linear-gradient(135deg, #ff0844, #ff6b35)';
+        phDisplay.style.webkitBackgroundClip = 'text';
+        phDisplay.style.webkitTextFillColor = 'transparent';
+        phDisplay.style.backgroundClip = 'text';
+      } else if (ph < 6) {
+        phDisplay.style.background = 'linear-gradient(135deg, #ffaa00, #ffd23f)';
+        phDisplay.style.webkitBackgroundClip = 'text';
+        phDisplay.style.webkitTextFillColor = 'transparent';
+        phDisplay.style.backgroundClip = 'text';
+      } else if (ph >= 6 && ph <= 8) {
+        phDisplay.style.background = 'linear-gradient(135deg, #00e5a0, #c3f73a)';
+        phDisplay.style.webkitBackgroundClip = 'text';
+        phDisplay.style.webkitTextFillColor = 'transparent';
+        phDisplay.style.backgroundClip = 'text';
+      } else if (ph < 11) {
+        phDisplay.style.background = 'linear-gradient(135deg, #00d9ff, #0099ff)';
+        phDisplay.style.webkitBackgroundClip = 'text';
+        phDisplay.style.webkitTextFillColor = 'transparent';
+        phDisplay.style.backgroundClip = 'text';
+      } else {
+        phDisplay.style.background = 'linear-gradient(135deg, #b842ff, #6b5fff)';
+        phDisplay.style.webkitBackgroundClip = 'text';
+        phDisplay.style.webkitTextFillColor = 'transparent';
+        phDisplay.style.backgroundClip = 'text';
+      }
+    }
+    
+    function setPH(value) {
+      const slider = document.getElementById('ph-slider');
+      slider.value = value;
+      updatePHDisplay(value);
+    }
+    
+    // Initialize slider
+    document.getElementById('ph-slider').addEventListener('input', function(e) {
+      updatePHDisplay(e.target.value);
+    });
+    
+    // Initialize SDK
+    async function onConfigChange(config) {
+      const titleEl = document.getElementById('main-title');
+      const subtitleEl = document.getElementById('subtitle');
+      
+      if (titleEl) {
+        titleEl.textContent = config.main_title || defaultConfig.main_title;
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = config.subtitle || defaultConfig.subtitle;
+      }
+    }
+    
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['subtitle', config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+    
+    // Initial display
+    updatePHDisplay(7);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c87fb4d45ed8247',t:'MTc3MDE4NTE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
