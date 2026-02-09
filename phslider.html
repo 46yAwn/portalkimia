@@ -32,6 +32,23 @@
       );
       box-shadow: 0 8px 32px rgba(255, 0, 136, 0.3);
     }
+
+    .ph-gradient-vertical {
+      background: linear-gradient(180deg, 
+        #ff0844 0%, 
+        #ff6b35 10%, 
+        #ffaa00 20%, 
+        #ffd23f 30%, 
+        #c3f73a 40%, 
+        #00e5a0 50%, 
+        #00d9ff 60%, 
+        #0099ff 70%, 
+        #6b5fff 80%, 
+        #b842ff 90%, 
+        #ff00ff 100%
+      );
+      box-shadow: 0 8px 32px rgba(255, 0, 136, 0.3);
+    }
     
     .bubble {
       position: absolute;
@@ -276,6 +293,91 @@
       font-weight: bold;
       color: #b842ff;
     }
+
+    /* pH Scale Styles */
+    .ph-scale-container {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .ph-scale-horizontal {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    .ph-scale-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .ph-scale-item-horizontal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 0.25rem;
+    }
+
+    .ph-scale-item-vertical {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .ph-scale-value {
+      font-weight: bold;
+    }
+
+    .ph-scale-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 767px) {
+      .ph-scale-horizontal {
+        display: none;
+      }
+
+      .ph-scale-vertical {
+        display: flex;
+      }
+
+      .ph-scale-item-vertical .ph-scale-value {
+        min-width: 2rem;
+        text-align: center;
+      }
+
+      .ph-scale-item-vertical .ph-scale-label {
+        flex: 1;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .ph-scale-horizontal {
+        display: flex;
+      }
+
+      .ph-scale-vertical {
+        display: none;
+      }
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -472,7 +574,7 @@
       <p class="text-base md:text-lg font-bold mb-4" style="color: #ffffff;">pH = 7</p>
       <ul class="text-xs md:text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
        <li class="font-semibold">⚖️ Keseimbangan ion H⁺ dan OH⁻</li>
-       <li class="font-semibold">�� Tidak korosif</li>
+       <li class="font-semibold">💧 Tidak korosif</li>
        <li class="font-semibold">🌱 Aman untuk kehidupan</li>
        <li class="font-semibold">📝 Tidak mengubah lakmus</li>
       </ul>
@@ -502,41 +604,50 @@
       </div>
      </div>
     </div><!-- Enhanced pH Scale Reference -->
-    <div class="glass-card rounded-3xl p-6 md:p-8 mb-10 simple-border overflow-x-auto">
+    <div class="glass-card rounded-3xl p-6 md:p-8 mb-10 simple-border">
      <h3 class="text-2xl md:text-3xl font-black text-center mb-6 gradient-text">Skala pH Berbagai Zat</h3>
      <div class="relative">
-      <div class="ph-gradient h-12 md:h-14 rounded-2xl mb-6"></div>
-      <div class="flex flex-row w-full justify-between items-center px-2 md:px-4 py-6 md:py-8 overflow-x-auto">
-        <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff1a52;">1</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lambung</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff4d5e;">2</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lemon</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff7a40;">3</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Cuka</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ffa61a;">4</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Tomat</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ffc825;">5</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Kopi</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #d9f030;">6</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Susu</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00e5a0;">7</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Air</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00ddc7;">8</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Laut</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00cbee;">9</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Soda</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00aaff;">10</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Antasida</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #3388ff;">11</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Amonia</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #6b5fff;">12</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Sabun</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #9944ff;">13</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Pemutih</span>
-       </div>
-       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #cc00ff;">14</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">NaOH</span>
-       </div>
+      <!-- Desktop/Horizontal View -->
+      <div class="flex flex-col gap-4">
+        <div class="ph-gradient-vertical h-auto md:h-14 rounded-2xl mb-0 md:mb-6 hidden md:block" style="background: linear-gradient(90deg, #ff0844 0%, #ff6b35 10%, #ffaa00 20%, #ffd23f 30%, #c3f73a 40%, #00e5a0 50%, #00d9ff 60%, #0099ff 70%, #6b5fff 80%, #b842ff 90%, #ff00ff 100%);"></div>
+        
+        <!-- Horizontal scale labels (Desktop only) -->
+        <div class="ph-scale-horizontal hidden md:flex">
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ff0844;">0</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Aki</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ff1a52;">1</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Lambung</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ff4d5e;">2</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Lemon</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ff7a40;">3</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Cuka</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ffa61a;">4</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Tomat</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #ffc825;">5</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Kopi</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #d9f030;">6</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Susu</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #00e5a0;">7</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Air</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #00ddc7;">8</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Laut</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #00cbee;">9</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Soda</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #00aaff;">10</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Antasida</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #3388ff;">11</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Amonia</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #6b5fff;">12</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Sabun</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #9944ff;">13</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Pemutih</span></div>
+          <div class="ph-scale-item-horizontal"><span class="ph-scale-value" style="color: #cc00ff;">14</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">NaOH</span></div>
+        </div>
+
+        <!-- Vertical scale (Mobile only) -->
+        <div class="ph-scale-vertical md:hidden">
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ff0844, #cc0636); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ff0844;">0</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Aki</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ff1a52, #cc1541); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ff1a52;">1</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Lambung</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ff4d5e, #cc3e4b); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ff4d5e;">2</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Lemon</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ff7a40, #cc6133); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ff7a40;">3</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Cuka</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ffa61a, #cc8515); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ffa61a;">4</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Tomat</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #ffc825, #cca01d); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #ffc825;">5</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Kopi</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #d9f030, #aec026); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #d9f030;">6</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Susu</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #00e5a0, #00b77f); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #00e5a0;">7</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Air</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #00ddc7, #00b19f); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #00ddc7;">8</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Laut</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #00cbee, #00a2be); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #00cbee;">9</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Soda</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #00aaff, #0088cc); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #00aaff;">10</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Antasida</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #3388ff, #296dcc); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #3388ff;">11</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Amonia</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #6b5fff, #564ccc); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #6b5fff;">12</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Sabun</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #9944ff, #7a36cc); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #9944ff;">13</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">Pemutih</span></div>
+          <div class="ph-scale-item-vertical"><div style="background: linear-gradient(90deg, #cc00ff, #a300cc); width: 40px; height: 40px; border-radius: 0.5rem;"></div> <span class="ph-scale-value" style="color: #cc00ff;">14</span> <span class="ph-scale-label" style="color: rgba(255,255,255,0.8);">NaOH</span></div>
+        </div>
       </div>
      </div>
     </div><!-- Enhanced Formula Section -->
@@ -698,5 +809,6 @@
     // Initial display
     updatePHDisplay(7);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c87fb4d45ed8247',t:'MTc3MDE4NTE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c87fb4d45ed8247',t:'MTc3MDE4NTE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
 </html>
