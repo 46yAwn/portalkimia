@@ -149,6 +149,133 @@
     .simple-border {
       border: 2px solid rgba(255, 255, 255, 0.1);
     }
+
+    .ph-input-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .ph-input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ph-input-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+    }
+
+    .ph-input-hint {
+      font-size: 0.75rem;
+      color: rgba(0,229,255,0.7);
+      font-weight: 600;
+    }
+
+    .ph-input {
+      background: rgba(30,30,50,0.9) !important;
+      color: #00e5ff !important;
+      border: 2px solid #00e5ff !important;
+      font-weight: bold;
+      font-size: 1.25rem;
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.875rem;
+      width: 100px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .ph-input:focus {
+      outline: none;
+      border-color: #b842ff !important;
+      box-shadow: 0 0 20px rgba(184, 66, 255, 0.6), inset 0 0 10px rgba(184, 66, 255, 0.2);
+      background: rgba(30,30,50,0.95) !important;
+      transform: scale(1.05);
+    }
+
+    .ph-input::placeholder {
+      color: rgba(0, 229, 255, 0.4);
+    }
+
+    .ph-display-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+      width: 100%;
+    }
+
+    .ph-display-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .ph-input-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ph-divider {
+      width: 2px;
+      background: rgba(255,255,255,0.2);
+      height: 160px;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .ph-divider {
+        display: block;
+      }
+
+      .ph-display-container {
+        gap: 2rem;
+      }
+
+      .ph-input {
+        width: 100px;
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .ph-display-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .ph-input {
+        width: 90px;
+        font-size: 1.125rem;
+      }
+
+      #ph-display {
+        font-size: 5rem !important;
+      }
+    }
+
+    .ph-display-text {
+      text-align: center;
+    }
+
+    .ph-unit {
+      position: absolute;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #b842ff;
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -165,8 +292,8 @@
    </div>
    <div class="relative z-10 max-w-7xl mx-auto px-4 py-10"><!-- Enhanced Header -->
     <header class="text-center mb-12">
-     <div class="inline-flex items-center gap-4 mb-6"><!-- Enhanced Flask Icon SVG -->
-      <svg class="w-20 h-20 animate-pulse-slow" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+     <div class="inline-flex items-center gap-4 mb-6 flex-col md:flex-row"><!-- Enhanced Flask Icon SVG -->
+      <svg class="w-16 h-16 md:w-20 md:h-20 animate-pulse-slow" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
         <lineargradient id="flaskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
          <stop offset="0%" stop-color="#00e5ff" />
          <stop offset="50%" stop-color="#b842ff" />
@@ -175,89 +302,119 @@
        </defs> <path d="M24 8V24L12 44C10 48 13 52 18 52H46C51 52 54 48 52 44L40 24V8" stroke="url(#flaskGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /> <path d="M20 8H44" stroke="url(#flaskGradient)" stroke-width="4" stroke-linecap="round" /> <circle cx="26" cy="40" r="5" fill="#ff0088" opacity="0.8" /> <circle cx="38" cy="36" r="4" fill="#00e5ff" opacity="0.8" /> <circle cx="32" cy="44" r="6" fill="#ffd23f" opacity="0.8" /> <path class="droplet-animation" d="M32 16L35 24L32 30L29 24L32 16Z" fill="#b842ff" />
       </svg>
       <div>
-       <h1 id="main-title" class="text-5xl md:text-7xl font-black gradient-text mb-2">pH Meter Interaktif</h1>
-       <p id="subtitle" class="text-xl md:text-2xl font-semibold" style="background: linear-gradient(90deg, #00e5ff, #ffd23f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cek tingkat keasaman larutan</p>
+       <h1 id="main-title" class="text-4xl md:text-7xl font-black gradient-text mb-2">pH Meter Interaktif</h1>
+       <p id="subtitle" class="text-lg md:text-2xl font-semibold" style="background: linear-gradient(90deg, #00e5ff, #ffd23f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Cek tingkat keasaman larutan</p>
       </div>
      </div>
     </header><!-- Enhanced Main pH Meter Card -->
-    <div class="glass-card simple-border rounded-3xl shadow-2xl p-10 mb-10"><!-- Enhanced pH Display -->
-     <div class="text-center mb-10">
-      <div class="inline-block relative">
-       <div id="ph-display" class="text-9xl md:text-[12rem] font-black gradient-text">
-        7.0
-       </div><span class="absolute -top-4 -right-10 text-3xl font-bold" style="color: #b842ff;">pH</span>
+    <div class="glass-card simple-border rounded-3xl shadow-2xl p-6 md:p-10 mb-10"><!-- Enhanced pH Display Section -->
+     <div class="ph-display-section mb-8">
+      <!-- pH Display Container -->
+      <div class="ph-display-container">
+        <!-- Input Manual Box (Mobile: Below, Desktop: Left) -->
+        <div class="ph-input-box">
+          <label for="ph-input" class="ph-input-label">📊 Input Manual</label>
+          <input 
+            type="number" 
+            id="ph-input" 
+            class="ph-input"
+            min="0" 
+            max="14" 
+            step="0.1" 
+            value="7"
+            placeholder="7"
+          />
+          <div class="ph-input-hint">Min: 0 | Max: 14</div>
+        </div>
+
+        <!-- Divider (Desktop Only) -->
+        <div class="ph-divider"></div>
+
+        <!-- pH Display Value (Mobile: Full Width, Desktop: Right) -->
+        <div class="ph-display-text relative">
+          <div id="ph-display" class="text-8xl md:text-[10rem] font-black gradient-text leading-none">
+            7.0
+          </div>
+          <span class="ph-unit" style="right: -50px; top: 10px; font-size: 2rem;">pH</span>
+        </div>
       </div>
-      <p id="ph-status" class="text-3xl font-bold mt-4" style="color: #ffffff;">Netral</p>
-      <p id="ph-description" class="text-lg mt-2 max-w-2xl mx-auto" style="color: rgba(255,255,255,0.7);">Air murni, tidak bersifat asam maupun basa</p>
-     </div><!-- Enhanced pH Slider -->
-     <div class="mb-10">
+
+      <!-- Status and Description (Below Display) -->
+      <div class="mt-6 text-center w-full">
+        <p id="ph-status" class="text-2xl md:text-3xl font-bold" style="color: #ffffff;">Netral</p>
+        <p id="ph-description" class="text-sm md:text-lg mt-2 max-w-2xl mx-auto" style="color: rgba(255,255,255,0.7);">Air murni, tidak bersifat asam maupun basa</p>
+      </div>
+     </div>
+
+     <!-- Enhanced pH Slider -->
+     <div class="mb-8">
       <div class="relative mb-8">
-       <div class="ph-gradient h-16 rounded-full relative shadow-2xl"><input type="range" id="ph-slider" min="0" max="14" step="0.1" value="7" class="slider-thumb absolute inset-0 w-full h-full cursor-pointer" style="opacity: 1; background: transparent;"> <!-- pH markers -->
+       <div class="ph-gradient h-14 md:h-16 rounded-full relative shadow-2xl"><input type="range" id="ph-slider" min="0" max="14" step="0.1" value="7" class="slider-thumb absolute inset-0 w-full h-full cursor-pointer" style="opacity: 1; background: transparent;"> <!-- pH markers -->
         <div class="absolute inset-0 flex justify-between items-center px-3 pointer-events-none">
-         <div class="w-1 h-8 bg-white opacity-70 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-10 bg-white opacity-80 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-12 bg-white opacity-90 rounded-full shadow-lg"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-10 bg-white opacity-80 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-6 bg-white opacity-50 rounded-full"></div>
-         <div class="w-1 h-8 bg-white opacity-70 rounded-full"></div>
+         <div class="w-1 h-6 md:h-8 bg-white opacity-70 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-7 md:h-10 bg-white opacity-80 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-9 md:h-12 bg-white opacity-90 rounded-full shadow-lg"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-7 md:h-10 bg-white opacity-80 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-5 bg-white opacity-50 rounded-full"></div>
+         <div class="w-1 h-6 md:h-8 bg-white opacity-70 rounded-full"></div>
         </div>
        </div>
       </div>
-      <div class="grid grid-cols-3 gap-6 text-center mb-6">
-       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(255,8,68,0.25), rgba(255,107,53,0.25)); border: 2px solid #ff0844;">
-        <div class="text-5xl mb-2">
+      <div class="grid grid-cols-3 gap-3 md:gap-6 text-center mb-6">
+       <div class="rounded-2xl p-3 md:p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(255,8,68,0.25), rgba(255,107,53,0.25)); border: 2px solid #ff0844;">
+        <div class="text-3xl md:text-5xl mb-1 md:mb-2">
          🔥
         </div>
-        <div class="font-black text-xl mb-1" style="color: #ff0844;">
+        <div class="font-black text-xs md:text-xl mb-1" style="color: #ff0844;">
          ASAM
         </div>
-        <div class="font-bold text-lg" style="color: #ffffff;">
-         pH 0 - 6.9
+        <div class="font-bold text-xs md:text-lg" style="color: #ffffff;">
+         pH 0-6.9
         </div>
-        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
-         Ion H⁺ Dominan
+        <div class="text-xs font-semibold mt-1 md:mt-2" style="color: rgba(255,255,255,0.8);">
+         H⁺ Dominan
         </div>
        </div>
-       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(0,229,160,0.25), rgba(195,247,58,0.25)); border: 2px solid #00e5a0;">
-        <div class="text-5xl mb-2">
+       <div class="rounded-2xl p-3 md:p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(0,229,160,0.25), rgba(195,247,58,0.25)); border: 2px solid #00e5a0;">
+        <div class="text-3xl md:text-5xl mb-1 md:mb-2">
          💧
         </div>
-        <div class="font-black text-xl mb-1" style="color: #00e5a0;">
+        <div class="font-black text-xs md:text-xl mb-1" style="color: #00e5a0;">
          NETRAL
         </div>
-        <div class="font-bold text-lg" style="color: #ffffff;">
+        <div class="font-bold text-xs md:text-lg" style="color: #ffffff;">
          pH = 7
         </div>
-        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
-         H⁺ = OH⁻ Seimbang
+        <div class="text-xs font-semibold mt-1 md:mt-2" style="color: rgba(255,255,255,0.8);">
+         Seimbang
         </div>
        </div>
-       <div class="rounded-2xl p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(184,66,255,0.25), rgba(107,95,255,0.25)); border: 2px solid #b842ff;">
-        <div class="text-5xl mb-2">
+       <div class="rounded-2xl p-3 md:p-4 shadow-lg" style="background: linear-gradient(135deg, rgba(184,66,255,0.25), rgba(107,95,255,0.25)); border: 2px solid #b842ff;">
+        <div class="text-3xl md:text-5xl mb-1 md:mb-2">
          ⚡
         </div>
-        <div class="font-black text-xl mb-1" style="color: #b842ff;">
+        <div class="font-black text-xs md:text-xl mb-1" style="color: #b842ff;">
          BASA
         </div>
-        <div class="font-bold text-lg" style="color: #ffffff;">
-         pH 7.1 - 14
+        <div class="font-bold text-xs md:text-lg" style="color: #ffffff;">
+         pH 7.1-14
         </div>
-        <div class="text-sm font-semibold mt-2" style="color: rgba(255,255,255,0.8);">
-         Ion OH⁻ Dominan
+        <div class="text-xs font-semibold mt-1 md:mt-2" style="color: rgba(255,255,255,0.8);">
+         OH⁻ Dominan
         </div>
        </div>
       </div>
      </div><!-- Enhanced Liquid Indicator -->
      <div class="flex justify-center mb-8">
       <div class="relative"><!-- Enhanced Test Tube SVG -->
-       <svg class="w-40 h-56" viewbox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
+       <svg class="w-32 md:w-40 h-48 md:h-56" viewbox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg"><defs>
          <lineargradient id="liquidGradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" id="liquid-color-top" stop-color="#00e5a0" />
           <stop offset="100%" id="liquid-color-bottom" stop-color="#00aa70" />
@@ -280,132 +437,130 @@
        </svg>
       </div>
      </div><!-- Enhanced Quick Select Buttons -->
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-4"><button onclick="setPH(1)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #ff0844, #ff6b35); box-shadow: 0 8px 25px rgba(255,8,68,0.4);"> 🍋 Asam Lambung<br><span class="text-sm opacity-90">(pH 1)</span> </button> <button onclick="setPH(2.5)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #ffaa00, #ffd23f); box-shadow: 0 8px 25px rgba(255,170,0,0.4);"> 🍊 Jus Jeruk<br><span class="text-sm opacity-90">(pH 2.5)</span> </button> <button onclick="setPH(7)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #00e5a0, #c3f73a); box-shadow: 0 8px 25px rgba(0,229,160,0.4);"> 💧 Air Murni<br><span class="text-sm opacity-90">(pH 7)</span> </button> <button onclick="setPH(13)" class="font-bold py-4 px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-lg" style="background: linear-gradient(135deg, #b842ff, #6b5fff); box-shadow: 0 8px 25px rgba(184,66,255,0.4);"> 🧼 Pemutih<br><span class="text-sm opacity-90">(pH 13)</span> </button>
+     <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4"><button onclick="setPH(1)" class="font-bold py-3 md:py-4 px-2 md:px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-xs md:text-lg" style="background: linear-gradient(135deg, #ff0844, #ff6b35); box-shadow: 0 8px 25px rgba(255,8,68,0.4);"> 🍋 Asam Lambung<br><span class="text-xs md:text-sm opacity-90">(pH 1)</span> </button> <button onclick="setPH(2.5)" class="font-bold py-3 md:py-4 px-2 md:px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-xs md:text-lg" style="background: linear-gradient(135deg, #ffaa00, #ffd23f); box-shadow: 0 8px 25px rgba(255,170,0,0.4);"> 🍊 Jus Jeruk<br><span class="text-xs md:text-sm opacity-90">(pH 2.5)</span> </button> <button onclick="setPH(7)" class="font-bold py-3 md:py-4 px-2 md:px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-xs md:text-lg" style="background: linear-gradient(135deg, #00e5a0, #c3f73a); box-shadow: 0 8px 25px rgba(0,229,160,0.4);"> 💧 Air Murni<br><span class="text-xs md:text-sm opacity-90">(pH 7)</span> </button> <button onclick="setPH(13)" class="font-bold py-3 md:py-4 px-2 md:px-5 rounded-2xl transition-all hover:scale-110 shadow-xl text-white text-xs md:text-lg" style="background: linear-gradient(135deg, #b842ff, #6b5fff); box-shadow: 0 8px 25px rgba(184,66,255,0.4);"> 🧼 Pemutih<br><span class="text-xs md:text-sm opacity-90">(pH 13)</span> </button>
      </div>
     </div><!-- Enhanced Info Cards -->
-    <div class="grid md:grid-cols-3 gap-8 mb-10"><!-- Asam Card -->
-     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #ff0844; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+    <div class="grid md:grid-cols-3 gap-6 md:gap-8 mb-10"><!-- Asam Card -->
+     <div class="info-card glass-card rounded-3xl p-6 md:p-8 border-l-8" style="border-color: #ff0844; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
       <div class="flex items-center gap-4 mb-5">
-       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #ff0844, #ff6b35);">
-        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L15 8H9L12 2Z" /> <circle cx="12" cy="15" r="6" /> <path d="M12 12V18M9 15H15" />
+       <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #ff0844, #ff6b35);">
+        <svg class="w-6 h-6 md:w-8 md:h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L15 8H9L12 2Z" /> <circle cx="12" cy="15" r="6" /> <path d="M12 12V18M9 15H15" />
         </svg>
        </div>
-       <h3 class="text-2xl font-black" style="color: #ff0844;">Larutan Asam</h3>
+       <h3 class="text-lg md:text-2xl font-black" style="color: #ff0844;">Larutan Asam</h3>
       </div>
-      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH 0 - 6.9</p>
-      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+      <p class="text-base md:text-lg font-bold mb-4" style="color: #ffffff;">pH 0 - 6.9</p>
+      <ul class="text-xs md:text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
        <li class="font-semibold">🔬 Mengandung ion H⁺ berlebih</li>
        <li class="font-semibold">⚡ Dapat menghantarkan listrik</li>
        <li class="font-semibold">🧪 Bereaksi dengan logam</li>
        <li class="font-semibold">📝 Mengubah lakmus biru → merah</li>
       </ul>
-      <div class="mt-5 p-4 rounded-xl" style="background: rgba(255,8,68,0.15);">
-       <p class="text-sm font-black mb-2" style="color: #ff0844;">Contoh Larutan:</p>
-       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Cuka, jus lemon, asam lambung, cola, baterai aki</p>
+      <div class="mt-5 p-3 md:p-4 rounded-xl" style="background: rgba(255,8,68,0.15);">
+       <p class="text-xs md:text-sm font-black mb-2" style="color: #ff0844;">Contoh Larutan:</p>
+       <p class="text-xs md:text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Cuka, jus lemon, asam lambung, cola, baterai aki</p>
       </div>
      </div><!-- Netral Card -->
-     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #00e5a0; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+     <div class="info-card glass-card rounded-3xl p-6 md:p-8 border-l-8" style="border-color: #00e5a0; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
       <div class="flex items-center gap-4 mb-5">
-       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #00e5a0, #c3f73a);">
-        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" /> <path d="M12 8V16M8 12H16" />
+       <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #00e5a0, #c3f73a);">
+        <svg class="w-6 h-6 md:w-8 md:h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9" /> <path d="M12 8V16M8 12H16" />
         </svg>
        </div>
-       <h3 class="text-2xl font-black" style="color: #00e5a0;">Larutan Netral</h3>
+       <h3 class="text-lg md:text-2xl font-black" style="color: #00e5a0;">Larutan Netral</h3>
       </div>
-      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH = 7</p>
-      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+      <p class="text-base md:text-lg font-bold mb-4" style="color: #ffffff;">pH = 7</p>
+      <ul class="text-xs md:text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
        <li class="font-semibold">⚖️ Keseimbangan ion H⁺ dan OH⁻</li>
-       <li class="font-semibold">💧 Tidak korosif</li>
+       <li class="font-semibold">�� Tidak korosif</li>
        <li class="font-semibold">🌱 Aman untuk kehidupan</li>
        <li class="font-semibold">📝 Tidak mengubah lakmus</li>
       </ul>
-      <div class="mt-5 p-4 rounded-xl" style="background: rgba(0,229,160,0.15);">
-       <p class="text-sm font-black mb-2" style="color: #00e5a0;">Contoh Larutan:</p>
-       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Air murni, air suling, garam dapur, darah manusia (~7.4)</p>
+      <div class="mt-5 p-3 md:p-4 rounded-xl" style="background: rgba(0,229,160,0.15);">
+       <p class="text-xs md:text-sm font-black mb-2" style="color: #00e5a0;">Contoh Larutan:</p>
+       <p class="text-xs md:text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Air murni, air suling, garam dapur, darah manusia (~7.4)</p>
       </div>
      </div><!-- Basa Card -->
-     <div class="info-card glass-card rounded-3xl p-8 border-l-8" style="border-color: #b842ff; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
+     <div class="info-card glass-card rounded-3xl p-6 md:p-8 border-l-8" style="border-color: #b842ff; box-shadow: 0 15px 45px rgba(0,0,0,0.4);">
       <div class="flex items-center gap-4 mb-5">
-       <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #b842ff, #6b5fff);">
-        <svg class="w-8 h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22L8 16H16L12 22Z" /> <circle cx="12" cy="9" r="6" /> <path d="M9 9H15" />
+       <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #b842ff, #6b5fff);">
+        <svg class="w-6 h-6 md:w-8 md:h-8 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22L8 16H16L12 22Z" /> <circle cx="12" cy="9" r="6" /> <path d="M9 9H15" />
         </svg>
        </div>
-       <h3 class="text-2xl font-black" style="color: #b842ff;">Larutan Basa</h3>
+       <h3 class="text-lg md:text-2xl font-black" style="color: #b842ff;">Larutan Basa</h3>
       </div>
-      <p class="text-lg font-bold mb-4" style="color: #ffffff;">pH 7.1 - 14</p>
-      <ul class="text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
+      <p class="text-base md:text-lg font-bold mb-4" style="color: #ffffff;">pH 7.1 - 14</p>
+      <ul class="text-xs md:text-sm space-y-3" style="color: rgba(255,255,255,0.8);">
        <li class="font-semibold">🔬 Mengandung ion OH⁻ berlebih</li>
        <li class="font-semibold">🧴 Terasa licin di kulit</li>
        <li class="font-semibold">🧪 Bereaksi dengan lemak</li>
        <li class="font-semibold">📝 Mengubah lakmus merah → biru</li>
       </ul>
-      <div class="mt-5 p-4 rounded-xl" style="background: rgba(184,66,255,0.15);">
-       <p class="text-sm font-black mb-2" style="color: #b842ff;">Contoh Larutan:</p>
-       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Sabun, pemutih, soda kue, amonia, air laut</p>
+      <div class="mt-5 p-3 md:p-4 rounded-xl" style="background: rgba(184,66,255,0.15);">
+       <p class="text-xs md:text-sm font-black mb-2" style="color: #b842ff;">Contoh Larutan:</p>
+       <p class="text-xs md:text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Sabun, pemutih, soda kue, amonia, air laut</p>
       </div>
      </div>
     </div><!-- Enhanced pH Scale Reference -->
-    <div class="glass-card rounded-3xl p-8 mb-10 simple-border">
-     <h3 class="text-3xl font-black text-center mb-6 gradient-text">Skala pH Berbagai Zat</h3>
+    <div class="glass-card rounded-3xl p-6 md:p-8 mb-10 simple-border overflow-x-auto">
+     <h3 class="text-2xl md:text-3xl font-black text-center mb-6 gradient-text">Skala pH Berbagai Zat</h3>
      <div class="relative">
-      <div class="ph-gradient h-14 rounded-2xl mb-6"></div>
-      <div class="grid grid-cols-15 gap-1 text-center text-xs font-bold">
-      <div class="flex flex-row w-full justify-between items-center px-4 py-8">
-        <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
+      <div class="ph-gradient h-12 md:h-14 rounded-2xl mb-6"></div>
+      <div class="flex flex-row w-full justify-between items-center px-2 md:px-4 py-6 md:py-8 overflow-x-auto">
+        <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff0844;">0</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Aki</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff1a52;">1</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lambung</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff1a52;">1</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lambung</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff4d5e;">2</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lemon</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff4d5e;">2</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Lemon</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ff7a40;">3</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Cuka</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ff7a40;">3</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Cuka</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ffa61a;">4</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Tomat</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ffa61a;">4</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Tomat</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #ffc825;">5</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Kopi</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #ffc825;">5</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Kopi</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #d9f030;">6</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Susu</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #d9f030;">6</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Susu</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00e5a0;">7</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Air</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00e5a0;">7</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Air</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00ddc7;">8</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Laut</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00ddc7;">8</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Laut</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00cbee;">9</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Soda</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00cbee;">9</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Soda</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #00aaff;">10</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Antasida</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #00aaff;">10</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Antasida</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #3388ff;">11</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Amonia</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #3388ff;">11</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Amonia</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #6b5fff;">12</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Sabun</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #6b5fff;">12</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Sabun</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #9944ff;">13</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Pemutih</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #9944ff;">13</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">Pemutih</span>
        </div>
-       <div class="flex flex-col items-center"><span class="text-xl mb-1" style="color: #cc00ff;">14</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">NaOH</span>
+       <div class="flex flex-col items-center flex-shrink-0"><span class="text-lg md:text-xl mb-1" style="color: #cc00ff;">14</span> <span class="text-xs font-semibold" style="color: rgba(255,255,255,0.8);">NaOH</span>
        </div>
       </div>
-      </div> 
      </div>
     </div><!-- Enhanced Formula Section -->
-    <div class="glass-card rounded-3xl p-8">
-     <h3 class="text-3xl font-black text-center mb-8 gradient-text">🧮 Rumus Perhitungan pH</h3>
-     <div class="grid md:grid-cols-2 gap-8">
-      <div class="rounded-2xl p-6" style="background: rgba(255,8,68,0.15); border: 3px solid #ff0844;">
-       <h4 class="font-black text-2xl mb-4" style="color: #ff0844;">Menghitung pH</h4>
-       <div class="rounded-xl p-6 text-center font-mono text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
+    <div class="glass-card rounded-3xl p-6 md:p-8">
+     <h3 class="text-2xl md:text-3xl font-black text-center mb-8 gradient-text">🧮 Rumus Perhitungan pH</h3>
+     <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+      <div class="rounded-2xl p-4 md:p-6" style="background: rgba(255,8,68,0.15); border: 3px solid #ff0844;">
+       <h4 class="font-black text-lg md:text-2xl mb-4" style="color: #ff0844;">Menghitung pH</h4>
+       <div class="rounded-xl p-4 md:p-6 text-center font-mono text-xl md:text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
         pH = -log [H⁺]
        </div>
-       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Di mana [H⁺] adalah konsentrasi ion hidrogen dalam mol/L. Semakin tinggi [H⁺], semakin rendah pH (lebih asam).</p>
+       <p class="text-xs md:text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Di mana [H⁺] adalah konsentrasi ion hidrogen dalam mol/L. Semakin tinggi [H⁺], semakin rendah pH (lebih asam).</p>
       </div>
-      <div class="rounded-2xl p-6" style="background: rgba(184,66,255,0.15); border: 3px solid #b842ff;">
-       <h4 class="font-black text-2xl mb-4" style="color: #b842ff;">Menghitung pOH</h4>
-       <div class="rounded-xl p-6 text-center font-mono text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
+      <div class="rounded-2xl p-4 md:p-6" style="background: rgba(184,66,255,0.15); border: 3px solid #b842ff;">
+       <h4 class="font-black text-lg md:text-2xl mb-4" style="color: #b842ff;">Menghitung pOH</h4>
+       <div class="rounded-xl p-4 md:p-6 text-center font-mono text-xl md:text-3xl font-black shadow-lg mb-4" style="background: rgba(20,20,40,0.8); color: #ffffff;">
         pOH = -log [OH⁻]
        </div>
-       <p class="text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Hubungan: pH + pOH = 14 (pada suhu 25°C). Semakin tinggi [OH⁻], semakin tinggi pOH (lebih basa).</p>
+       <p class="text-xs md:text-sm font-semibold" style="color: rgba(255,255,255,0.9);">Hubungan: pH + pOH = 14 (pada suhu 25°C). Semakin tinggi [OH⁻], semakin tinggi pOH (lebih basa).</p>
       </div>
      </div>
     </div><!-- Footer -->
-    <footer class="text-center mt-10 text-lg font-semibold" style="color: rgba(255,255,255,0.7);">
-     <p>✨ Geser slider untuk mengecek nilai pH atau klik tombol contoh zat ✨</p>
+    <footer class="text-center mt-10 text-base md:text-lg font-semibold" style="color: rgba(255,255,255,0.7);">
+     <p>✨ Geser slider, ketik input manual (0-14), atau klik tombol contoh zat ✨</p>
     </footer>
    </div>
   </div>
@@ -482,12 +637,31 @@
     
     function setPH(value) {
       const slider = document.getElementById('ph-slider');
+      const input = document.getElementById('ph-input');
       slider.value = value;
+      input.value = parseFloat(value).toFixed(1);
       updatePHDisplay(value);
     }
     
+    // Event listener untuk input manual
+    document.getElementById('ph-input').addEventListener('change', function(e) {
+      const value = Math.min(Math.max(parseFloat(e.target.value) || 7, 0), 14);
+      document.getElementById('ph-slider').value = value;
+      document.getElementById('ph-input').value = value.toFixed(1);
+      updatePHDisplay(value);
+    });
+
+    document.getElementById('ph-input').addEventListener('input', function(e) {
+      const value = parseFloat(e.target.value);
+      if (!isNaN(value) && value >= 0 && value <= 14) {
+        document.getElementById('ph-slider').value = value;
+        updatePHDisplay(value);
+      }
+    });
+    
     // Initialize slider
     document.getElementById('ph-slider').addEventListener('input', function(e) {
+      document.getElementById('ph-input').value = parseFloat(e.target.value).toFixed(1);
       updatePHDisplay(e.target.value);
     });
     
